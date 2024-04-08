@@ -1,11 +1,14 @@
 ASM=nasm
 
+CC16=/usr/bin/watcom/binl/wpp
+LD16=/usr/bin/watcom/binl/wlink
+
 SRC_DIR = source
 BUILD_DIR = build
 
 .PHONY: all floppy_image kernel bootloader clean always
 
-
+#Floppy
 floppy_image: $(BUILD_DIR)/main_floppy.img
 
 $(BUILD_DIR)/main_floppy.img: bootloader kernel

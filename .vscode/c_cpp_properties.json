@@ -1,0 +1,39 @@
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${vcpkgRoot}/x64-linux/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/clang",
+            "intelliSenseMode": "linux-clang-x64"
+        },
+        {
+            "name": "Watcon",
+            "includePath": [
+                "/home/saszombie/Coding/OS/**",
+                "/home/saszombie/git/vcpkg/installed/x64-linux/include"
+            ],
+            "defines": [
+                "_cdecl"
+            ],
+            "compilerPath": "/usr/bin/watcom/binl/wpp",
+            "intelliSenseMode": "linux-clang-x64",
+            "compilerPathInCppPropertiesJson": "/usr/bin/watcom/binl/wpp",
+            "cStandard": "c17",
+            "cppStandard": "c++23",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "/home/saszombie/Coding/OS/**",
+                    "/home/saszombie/git/vcpkg/installed/x64-linux/include",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        }
+    ],
+    "version": 4
+}

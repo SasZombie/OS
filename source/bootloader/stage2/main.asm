@@ -1,33 +1,27 @@
-org 0x0
 bits 16
 
-start:
+section _ENTRY class=CODE
 
-    lea si, msg
-    call puts
+extern _cstart_
 
-.halt:
+global entry
+
+entry:
     cli
-    hlt 
 
-   
-puts:
-    push si
-    push ax 
-
-.loop:
-    lodsb
-    or al, al 
-    jz .done 
+    mov ax, ds
+    mov ss, ax 
+    mov sp, 0
+    mov bp, sp
     
-    mov ah, 0x0e
-    int 0x10
-    jmp .loop
+    sti 
 
-.done:
-    pop si 
-    pop ax
-    ret 
+    ;expect boot drive in dl, send it as argument to cppstart function
 
+    xor dh, dh
+    push dx
 
-msg: db "Hello World FROM KERNEL!!",0x0D, 0x0A, 0
+    call _cstart_
+
+    cli
+    hlt
