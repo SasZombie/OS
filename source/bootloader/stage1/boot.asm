@@ -74,9 +74,9 @@ start:
     ;LBA of root is: reserved + nrOfFats * sectorsPerFat
 
     mov ax, [bdb_sectors_per_fat]
-    mov bx, [bdb_fat_count]
+    mov bl, [bdb_fat_count]
     xor bh, bh
-    mul bh                          ;dx:ax = nrOfFats * sectorsPerFat
+    mul bx                          ;dx:ax = nrOfFats * sectorsPerFat
     add ax, [bdb_reserved_sectors]
 
     ;We need the size of root directory: 32 * nr_of_entries / bytes_per_sector
@@ -105,29 +105,29 @@ root_dir_after:
 
     mov di, buffer
 
-.search_kernel:
-    lea si, file_kernel_bin
-    mov cx, 11              ;Length of kernel file name
+.search_stage2:
+    lea si, file_stage2_bin
+    mov cx, 11              ;Length of stage2 file name
     push di
     repe cmpsb              ;Compare 2 strings from si and di. Repe = repeat while equal
     pop di
-    je .found_kernel
+    je .found_stage2
 
     add di, 32
     inc bx
 
     cmp bx, [bdb_dir_entries_count]
-    jl .search_kernel
+    jl .search_stage2
 
-    jmp kernel_not_found
+    jmp stage2_not_found
 
 
-.found_kernel:
+.found_stage2:
     
     ;di should have the same address
 
     mov ax, [di + 26]
-    mov [kernel_cluster], ax    ;First cluster has offset 26
+    mov [stage2_cluster], ax    ;First cluster has offset 26
 
     ;Load FAT from disk
 
@@ -135,14 +135,71 @@ root_dir_after:
     mov bx, buffer
     mov cl, [bdb_sectors_per_fat]
     mov dl, [ebr_driver_number]
-
     call disk_read    
+
+    ;read stage2 and process FAT chain -> ->
+    mov bx, stage2_LOAD_SEGMENT
+    mov es, bx
+    mov bx, stage2_LOAD_OFFSET
+
+.load_stage2_loop:
+    ;We need to read all the clusters
+    mov ax, [stage2_cluster]
+    add ax, 31                          ;Hard Coded value. This will only work for 1.44 megabyter floppy disk
+
+    mov cl, 1
+    mov dl, [ebr_driver_number]
+    call disk_read
+
+    add bx, [bdb_bytes_per_sector]      
+    ;We need to compute the location of the next cluster
+
+    mov ax, [stage2_cluster]
+    mov cx, 3
+    mul cx
+    mov cx, 2
+    div cx                  ;ax = index of entry in FAT, dx = cluster % 2
+
+    lea si, buffer
+    add si, ax
+    mov ax, [ds:si]     
+
+    or dx, dx
+    jz .even
+
+.add:
+    shr ax, 4
+    jmp .next_cluster_after
+
+.even:
+    add ax, 0x0FFF
+
+.next_cluster_after:
+    cmp ax, 0x0FF8
+    jae .read_finish
+
+    mov [stage2_cluster], ax
+    jmp .load_stage2_loop
+
+.read_finish:
+    ;Boot device in dl
+    mov dl, [ebr_driver_number]
+    mov ax, stage2_LOAD_SEGMENT
+
+    mov ds, ax
+    mov es, ax 
+
+    jmp stage2_LOAD_SEGMENT:stage2_LOAD_OFFSET
+
+    ;Should never happen :c
+    jmp wait_and_reboot
+
 
     cli
     hlt 
 
-kernel_not_found:
-    lea si, msg_kernel_error
+stage2_not_found:
+    lea si, file_stage2_error
     call puts
     jmp wait_and_reboot
 
@@ -276,11 +333,13 @@ disk_reset:
 
 loading: db "Working on it", 0x0D, 0x0A, 0
 msg_read_fail: db "Faild to read disck", 0x0D, 0x0A, 0
-file_kernel_bin: db 'KERNEL  BIN'      ;This is how fat expects the kernel
-file_kernel_error: db "Cannot find kernel", 0x0D, 0x0A, 0
-kernel_cluster: db 0
+file_stage2_bin: db 'STAGE2  BIN'      ;This is how fat expects the stage2
+file_stage2_error: db "Cannot find stage2", 0x0D, 0x0A, 0
+stage2_cluster: db 0
+stage2_LOAD_SEGMENT equ 0x2000      ;Constant value
+stage2_LOAD_OFFSET  equ 0
 times 510-($-$$) db 0
 
 dw 0AA55h
 
-buffer: dw
+buffer:
