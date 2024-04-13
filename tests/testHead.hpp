@@ -6,7 +6,7 @@ static char numbers[] = "0123456789";
 void pr(char a);
 void pr(char* a);
 void pr(const char* a);
-void pr(float a);
+void pr(float a, unsigned int number = 6);
 
 
 template<typename T>
@@ -18,7 +18,7 @@ void pr(T number)
     if(number < 0)
     {
         pr('-');
-        negative = -1;
+        negative = -negative;
     }   
     
     number = number * negative;

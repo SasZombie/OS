@@ -7,8 +7,8 @@ extern "C"{
         (void) bootDrive;
         cout("Hello world from C!\r\n");
         int a = 32;
-
-        cout(a);
+        long a2 = 45;
+        cout(a2);
 
         
     }

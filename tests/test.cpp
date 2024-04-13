@@ -7,9 +7,12 @@ extern "C"{
         int b = 123;
         short c = 234;
 
-        pr("Meow");
-        pr(b);
-        pr(c);
+        float pi = 3.14;
+
+        // pr("Meow");
+        // pr(b);
+        // pr(c);
+        pr(pi);
     }
 }
 

@@ -48,22 +48,20 @@ static inline void printSinged(T number)
     if(number < 0)
     {
         cout('-');
-        negative = -1;
+        number = -number;
     }   
-    
-    number = number * negative;
-
-
+    //Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number 
+    //By another 64 number. 
+    //Normal / and % would create problems if number is big
+    //And long, long long wouldnt even compile since it calls to external lib
     unsigned long radix = 10;
     unsigned long long divident = static_cast<unsigned long long>(number);
+
     do
     {
         uint32_t rem;
         x86_div64_32(divident, radix, &divident, &rem);
         buffer[i++] = numbers[rem];
-        // buffer[i] = numbers[number%10];
-        // ++i;
-        // number = number/10;
     }while(divident);
 
     --i;
@@ -82,16 +80,18 @@ static inline void printUnsinged(T number)
     char buffer[20];
     short i = 0; 
 
+    //Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number 
+    //By another 64 number. 
+    //Normal / and % would create problems if number is big
+    //And long, long long wouldnt even compile since it calls to external lib
     unsigned long radix = 10;
     unsigned long long divident = static_cast<unsigned long long>(number);
+    
     do
     {
         uint32_t rem;
         x86_div64_32(divident, radix, &divident, &rem);
         buffer[i++] = numbers[rem];
-        // buffer[i] = numbers[number%10];
-        // ++i;
-        // number = number/10;
     }while(divident);
 
     --i;
@@ -112,14 +112,89 @@ void cout(short number)
     printSinged(number);
 }
 
-void cout(float number)
+void cout(float number, unsigned short decimals)
 {
-    (void) number;
+
+#ifdef FLOAT_NUMBERS
+    char numbers[] = "0123456789";
+    char buffer[40];
+    short i = 0;
+    if(number < 0)
+    {
+        cout('-');
+        number = -number;
+    }   
+
+    unsigned int integerPart = static_cast<int>(number);
+    float frac_part = number - integerPart;
+
+    do
+    {
+        int digit = integerPart % 10;
+        buffer[i++] = numbers[digit];
+        integerPart = integerPart / 10;
+
+    }while(integerPart);
+
+
+    buffer[i++] = '.';
+
+    for (int j = 0; j < decimals; j++)
+    { 
+        frac_part *= 10;
+        int digit = static_cast<int>(frac_part);
+        buffer[i++] = numbers[digit];
+        frac_part = frac_part - digit;
+    }
+    buffer[i] = '\0';
+    cout(buffer);
+#else
+    (void)number;
+    (void)decimals;
+#endif   
 }
 
-void cout(double number)
+void cout(double number, int decimals)
 {
-    (void) number;
+
+
+#ifdef DOUBLE_NUMBERS
+    char numbers[] = "0123456789";
+    char buffer[40];
+    short i = 0;
+    if(number < 0)
+    {
+        cout('-');
+        number = -number;
+    }   
+
+    unsigned int integerPart = static_cast<int>(number);
+    double frac_part = number - integerPart;
+
+    do
+    {
+        int digit = integerPart % 10;
+        buffer[i++] = numbers[digit];
+        integerPart = integerPart / 10;
+
+    }while(integerPart);
+
+
+    buffer[i++] = '.';
+
+    for (int j = 0; j < decimals; j++)
+    { 
+        frac_part *= 10;
+        int digit = static_cast<int>(frac_part);
+        buffer[i++] = numbers[digit];
+        frac_part = frac_part - digit;
+    }
+    buffer[i] = '\0';
+    cout(buffer);
+#else
+    (void)number;
+    (void)decimals;
+#endif   
 }
 
 void cout(unsigned int number)
@@ -132,7 +207,7 @@ void cout(unsigned short number)
     printUnsinged(number);
 }
 
-#if LONG_NUMBERS
+#ifdef LONG_NUMBERS
 void cout(long number)
 {
     printSinged(number);
