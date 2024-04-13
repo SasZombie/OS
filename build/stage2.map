@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Apr  8 2024 01:46:11 (32-bit)
 Copyright (c) 2002-2024 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       24/04/08 12:09:46
+Created on:       24/04/13 12:42:23
 Executable Image: /home/saszombie/Coding/OS/build/stage2.bin
 creating a RAW Binary Image executable
 
@@ -13,7 +13,7 @@ creating a RAW Binary Image executable
 Group                           Address              Size
 =====                           =======              ====
 
-DGROUP                          0000009a             00000005
+DGROUP                          000003e2             00000059
 
 
 
@@ -25,11 +25,11 @@ Segment                Class          Group          Address         Size
 =======                =====          =====          =======         ====
 
 _ENTRY                 CODE           AUTO           00000000        00000013
-_TEXT                  CODE           AUTO           00000013        00000087
-CONST                  DATA           DGROUP         0000009a        00000005
-CONST2                 DATA           DGROUP         0000009f        00000000
-_DATA                  DATA           DGROUP         0000009f        00000000
-_BSS                   BSS            DGROUP         0000009f        00000000
+_TEXT                  CODE           AUTO           00000013        000003cf
+CONST                  DATA           DGROUP         000003e2        00000016
+CONST2                 DATA           DGROUP         000003f8        00000000
+_DATA                  DATA           DGROUP         00000400        0000003b
+_BSS                   BSS            DGROUP         0000043b        00000000
 
 
                         +----------------+
@@ -46,11 +46,20 @@ Module: /home/saszombie/Coding/OS/build/stage2/asm/main.obj(main.asm)
 00000000       entry
 Module: /home/saszombie/Coding/OS/build/stage2/asm/x86.obj(x86.asm)
 00000013       _x86_Video_WriteCharTeletype
+00000026*      _x86_div64_32
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/main.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/main.cpp)
-00000026       _cstart_
+00000071       _cstart_
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/oioperations.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/oioperations.cpp)
-0000003c+      void __near cout( char )
-00000066       void __near cout( char const __near * )
+0000008d+      void __near cout( char )
+000000b7+      void __near cout( char const __far * )
+000000ee+      void __near cout( char const __near * )
+00000122       void __near cout( char __near * )
+00000156       void __near cout( int )
+000001fa+      void __near cout( short )
+0000029e+      void __near cout( float )
+000002b6+      void __near cout( double )
+000002ce+      void __near cout( int unsigned )
+00000358+      void __near cout( short unsigned )
 
 
                         +---------------------+
@@ -64,19 +73,23 @@ Module          Segment               Class           Address         Size
 ======          =======               =====           =======         ====
 
 main.asm        _ENTRY                CODE           00000000         00000013
-x86.asm         _TEXT                 CODE           00000013         00000013
+x86.asm         _TEXT                 CODE           00000013         0000005e
 /home/saszombie/Coding/OS/source/bootloader/stage2/main.cpp
-                _TEXT                 CODE           00000026         00000016
-                CONST                 DATA           0000009a         00000005
-                CONST2                DATA           0000009f         00000000
-                _DATA                 DATA           0000009f         00000000
-                _BSS                  BSS            0000009f         00000000
+                _TEXT                 CODE           00000071         0000001c
+                CONST                 DATA           000003e2         00000016
+                CONST2                DATA           000003f8         00000000
+                _DATA                 DATA           00000400         00000000
+                _BSS                  BSS            0000043b         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/oioperations.cpp
-                _TEXT                 CODE           0000003c         0000005e
-                CONST                 DATA           0000009f         00000000
-                CONST2                DATA           0000009f         00000000
-                _DATA                 DATA           0000009f         00000000
-                _BSS                  BSS            0000009f         00000000
+                _TEXT                 CODE           0000008d         00000355
+                CONST                 DATA           000003f8         00000000
+                CONST2                DATA           000003f8         00000000
+                _DATA                 DATA           00000400         00000000
+                _BSS                  BSS            0000043b         00000000
+                _DATA                 DATA           00000400 c       00000010
+                _DATA                 DATA           00000410 c       00000010
+                _DATA                 DATA           00000420 c       00000010
+                _DATA                 DATA           00000430 c       0000000b
 Warning! W1014: stack segment not found
 
 
@@ -85,6 +98,6 @@ Warning! W1014: stack segment not found
                         +-----------------------+
 
 Stack size:  0200 (512.)
-Memory size:  009f (159.)
+Memory size:  043b (1083.)
 Entry point address: 00000000
 Link time: 00:00.00
