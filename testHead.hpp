@@ -6,6 +6,7 @@ static char numbers[] = "0123456789";
 void pr(char a);
 void pr(char* a);
 void pr(const char* a);
+void pr(float a);
 
 
 template<typename T>

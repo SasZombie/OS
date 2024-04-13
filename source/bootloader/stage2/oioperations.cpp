@@ -3,6 +3,9 @@
 #include "x86.hpp"
 #include "stdint.hpp"
 
+#define __I4M
+
+
 void cout(char c)
 {
     x86_Video_WriteCharTeletype(c, 0);
@@ -35,7 +38,7 @@ void cout(char *str)
 }
 
 template<typename T>
-inline void printSinged(T number)
+static inline void printSinged(T number)
 {
 
     char numbers[] = "0123456789";
@@ -51,13 +54,17 @@ inline void printSinged(T number)
     number = number * negative;
 
 
+    unsigned long radix = 10;
+    unsigned long long divident = static_cast<unsigned long long>(number);
     do
     {
-        buffer[i] = numbers[number%10];
-        ++i;
-        number = number/10;
-
-    }while(number);
+        uint32_t rem;
+        x86_div64_32(divident, radix, &divident, &rem);
+        buffer[i++] = numbers[rem];
+        // buffer[i] = numbers[number%10];
+        // ++i;
+        // number = number/10;
+    }while(divident);
 
     --i;
     while(i >= 0)
@@ -69,18 +76,23 @@ inline void printSinged(T number)
 
 
 template<typename T>
-inline void printUnsinged(T number)
+static inline void printUnsinged(T number)
 {
     char numbers[] = "0123456789";
     char buffer[20];
     short i = 0; 
 
+    unsigned long radix = 10;
+    unsigned long long divident = static_cast<unsigned long long>(number);
     do
     {
-        buffer[i] = numbers[number%10];
-        ++i;
-        number = number/10;
-    }while(number);
+        uint32_t rem;
+        x86_div64_32(divident, radix, &divident, &rem);
+        buffer[i++] = numbers[rem];
+        // buffer[i] = numbers[number%10];
+        // ++i;
+        // number = number/10;
+    }while(divident);
 
     --i;
     while(i >= 0)
@@ -120,22 +132,24 @@ void cout(unsigned short number)
     printUnsinged(number);
 }
 
-// void cout(long number)
-// {
-//     printSinged(number);
-// }
+#if LONG_NUMBERS
+void cout(long number)
+{
+    printSinged(number);
+}
 
-// void cout(long long number)
-// {
-//     printSinged(number);
-// }
+void cout(long long number)
+{
+    printSinged(number);
+}
 
-// void cout(unsigned long number)
-// {
-//     printUnsinged(number);
-// }
+void cout(unsigned long number)
+{
+    printUnsinged(number);
+}
 
-// void cout(unsigned long long number)
-// {
-//     printUnsinged(number);
-// }
+void cout(unsigned long long number)
+{
+    printUnsinged(number);
+}
+#endif

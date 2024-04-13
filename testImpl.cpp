@@ -21,6 +21,9 @@ void pr(char *str)
         pr(*str);
         ++str;
     }
-    
 }
 
+void pr(float a)
+{
+    
+}
