@@ -2,6 +2,33 @@ bits 16
 
 section _TEXT class=CODE
 
+global __wcpp_4_undefed_cdtor__
+
+
+__wcpp_4_undefed_cdtor__:
+ret
+global __U4D
+
+__U4D:
+    shl edx, 16
+    mov dx, ax
+    mov eax, edx
+    xor edx, edx
+
+    shl ecx, 16
+    mov cx, bx
+
+    div ecx
+
+    mov ebx, edx
+    mov ecx, edx
+    shr ecx, 16
+
+    mov edx, eax
+    shr edx, 16
+
+    ret
+
 global _x86_Video_WriteCharTeletype
 ;CALL CONVENTION CDECL:
 ;ARGS: 
@@ -78,7 +105,7 @@ _x86_div64_32:
 
 global _x86_Video_WriteNumber
 
-x86_Video_WriteNumber:
+_x86_Video_WriteNumber:
 
 print_number:            ; Function entry point
     push bp              ; Save base pointer
@@ -103,3 +130,116 @@ print_digit:
 
     pop bp               ; Restore base pointer
     ret                   ; Return to caller
+
+
+; void _cdecl x86_Disk_Reset(uint8_t drive);
+global _x86_Disk_Reset
+
+_x86_Disk_Reset:
+    push bp
+    mov bp, sp 
+
+    mov ah, 0
+    mov dl, [bp + 4] ;dl drive
+    stc 
+    int 13h
+
+    mov ax, 1
+    sbb ax, 0
+
+    mov sp, bp
+    pop bp 
+    ret
+
+; void _cdecl x86_Disk_Read(uint8_t drive, uint8_t cylinder, uint8_t head, uint8_t sector, uint8_t count, uint8_t __far *dataOut);
+
+global _x86_Disk_Read
+
+_x86_Disk_Read:
+    push bp
+    mov bp, sp 
+
+    push bx
+    push es
+
+    mov ah, 02h
+    mov al, [bp + 10]
+    and al, 3Fh         ;Clear the first 5 bits 3Fh = 0011111
+    or cl, al 
+
+    mov ch, [bp + 6]
+    mov cl, [bp + 7]
+    shl cl, 6
+    mov dh, [bp + 8]
+    mov dl, [bp + 4]
+
+    mov bx, [bp + 16] ; Far Pointer to data Out 
+    mov es, bx
+    mov bx, [bp + 14]
+
+    stc 
+    int 13h
+
+
+    pop bx
+    pop es
+
+    mov sp, bp
+    pop bp
+    ret
+; void _cdecl x86_Disk_GetDriveParams(uint8_t drive, uint8_t *driveTypeOut, uint16_t* cylinderOut, uint16_t *sectorsOut, uint16_t *headsOut);
+
+global _x86_Disk_GetDriveParams
+
+_x86_Disk_GetDriveParams:
+    push bp
+    mov bp, sp 
+
+    push es 
+    push di
+    push bx
+    push si
+
+    mov ah, 08h
+    mov dl, [bp + 4]
+    mov di, 0   ;es:di -> 0000:0000
+    mov es, di 
+
+    stc
+    int 13h
+
+    mov ax, 1
+    sbb ax, 0
+
+
+    ;mov [bp + 6], bl ;To check if this can be done like this as well
+
+    lea si, [bp + 6]
+    mov [si], bl 
+
+    mov bl, ch 
+    mov bh, cl 
+    shr bh, 6
+
+    lea si, [bp + 8]
+    mov [si], bx
+
+
+    xor ch, ch 
+    and cl, 3Fh     
+    lea si, [bp + 10]
+    mov [si], cx    
+
+    lea si, [bp + 12]
+    mov [si], dh
+
+
+
+    pop es 
+    pop di
+    pop bx
+    pop si 
+
+    mov sp, bp 
+    pop bp 
+    ret
