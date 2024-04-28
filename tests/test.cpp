@@ -1,4 +1,5 @@
 #include "testHead.hpp"
+#include <fstream>
 
 extern "C"{
     void start()
@@ -18,6 +19,14 @@ extern "C"{
 
 int main()
 {
-    start();
+    std::fstream f("SAS.txt");
+
+    std::string s;
+    char l[20];
+
+    f << "aaa";
+    int x;
+    
+    f >> x;
 
 }

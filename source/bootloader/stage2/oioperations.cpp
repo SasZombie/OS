@@ -8,7 +8,11 @@
 
 void cout(char c)
 {
+    if(c == '\n')
+        x86_Video_WriteCharTeletype('\r', 0);
+
     x86_Video_WriteCharTeletype(c, 0);
+
 }
 
 void cout(const char __far *str)

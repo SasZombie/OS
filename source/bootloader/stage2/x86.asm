@@ -7,6 +7,22 @@ global __wcpp_4_undefed_cdtor__
 
 __wcpp_4_undefed_cdtor__:
 ret
+
+global __U4M
+__U4M:
+    shl edx, 16         ; dx to upper half of edx
+    mov dx, ax          ; m1 in edx
+    mov eax, edx        ; m1 in eax
+
+    shl ecx, 16         ; cx to upper half of ecx
+    mov cx, bx          ; m2 in ecx
+
+    mul ecx             ; result in edx:eax (we only need eax)
+    mov edx, eax        ; move upper half to dx
+    shr edx, 16
+
+    ret
+
 global __U4D
 
 __U4D:
@@ -156,37 +172,84 @@ _x86_Disk_Reset:
 global _x86_Disk_Read
 
 _x86_Disk_Read:
-    push bp
-    mov bp, sp 
+ ; make new call frame
+    push bp             ; save old call frame
+    mov bp, sp          ; initialize new call frame
 
+    ; save modified regs
     push bx
     push es
 
-    mov ah, 02h
-    mov al, [bp + 10]
-    and al, 3Fh         ;Clear the first 5 bits 3Fh = 0011111
-    or cl, al 
+    ; setup args
+    mov dl, [bp + 4]    ; dl - drive
 
-    mov ch, [bp + 6]
-    mov cl, [bp + 7]
+    mov ch, [bp + 6]    ; ch - cylinder (lower 8 bits)
+    mov cl, [bp + 7]    ; cl - cylinder to bits 6-7
     shl cl, 6
-    mov dh, [bp + 8]
-    mov dl, [bp + 4]
+    
+    mov al, [bp + 8]    ; cl - sector to bits 0-5
+    and al, 3Fh
+    or cl, al
 
-    mov bx, [bp + 16] ; Far Pointer to data Out 
+    mov dh, [bp + 10]   ; dh - head
+
+    mov al, [bp + 12]   ; al - count
+
+    mov bx, [bp + 16]   ; es:bx - far pointer to data out
     mov es, bx
     mov bx, [bp + 14]
 
-    stc 
+    ; call int13h
+    mov ah, 02h
+    stc
     int 13h
 
+    ; set return value
+    mov ax, 1
+    sbb ax, 0           ; 1 on success, 0 on fail   
 
-    pop bx
+    ; restore regs
     pop es
+    pop bx
 
+    ; restore old call frame
     mov sp, bp
     pop bp
     ret
+
+    ; push bp
+    ; mov bp, sp 
+
+    ; push bx
+    ; push es
+
+    ; mov ah, 02h
+    ; mov al, [bp + 10]
+    ; and al, 3Fh         ;Clear the first 5 bits 3Fh = 0011111
+    ; or cl, al 
+
+    ; mov dl, [bp + 4]
+
+    ; mov ch, [bp + 6]
+    ; mov cl, [bp + 7]
+    ; shl cl, 6
+    
+    ; mov dh, [bp + 8]
+
+    ; mov bx, [bp + 16] ; Far Pointer to data Out 
+    ; mov es, bx
+    ; mov bx, [bp + 14]
+
+    ; stc 
+    ; int 13h
+
+
+    ; pop bx
+    ; pop es
+
+    ; mov sp, bp
+    ; pop bp
+    ; ret
 ; void _cdecl x86_Disk_GetDriveParams(uint8_t drive, uint8_t *driveTypeOut, uint16_t* cylinderOut, uint16_t *sectorsOut, uint16_t *headsOut);
 
 global _x86_Disk_GetDriveParams
@@ -196,12 +259,12 @@ _x86_Disk_GetDriveParams:
     mov bp, sp 
 
     push es 
-    push di
     push bx
     push si
+    push di
 
-    mov ah, 08h
     mov dl, [bp + 4]
+    mov ah, 08h
     mov di, 0   ;es:di -> 0000:0000
     mov es, di 
 
@@ -214,23 +277,24 @@ _x86_Disk_GetDriveParams:
 
     ;mov [bp + 6], bl ;To check if this can be done like this as well
 
-    lea si, [bp + 6]
+    mov si, [bp + 6]
     mov [si], bl 
 
     mov bl, ch 
     mov bh, cl 
     shr bh, 6
 
-    lea si, [bp + 8]
+    mov si, [bp + 8]
     mov [si], bx
 
 
     xor ch, ch 
     and cl, 3Fh     
-    lea si, [bp + 10]
+    mov si, [bp + 10]
     mov [si], cx    
 
-    lea si, [bp + 12]
+    mov cl, dh
+    mov si, [bp + 12]
     mov [si], dh
 
 

@@ -1,58 +1,47 @@
 #include "disk.hpp"
 
-Disk::Disk(uint8_t driveNumber)
+
+bool DISK_Initialize(DISK* disk, uint8_t driveNumber)
 {
-    this->id = driveNumber;
     uint8_t driveType;
+    uint16_t cylinders, sectors, heads;
 
-    if(!x86_Disk_GetDriveParams(driveNumber, &driveType, &this->cylinders, &this->sectors, &this->heads))
-    {
-        cout("Disk Get Drive Params failed\n");
-    }
+    if (!x86_Disk_GetDriveParams(disk->id, &driveType, &cylinders, &sectors, &heads))
+        return false;
 
+    disk->id = driveNumber;
+    disk->cylinders = cylinders + 1;
+    disk->heads = heads + 1;
+    disk->sectors = sectors;
+
+    return true;
 }
 
-void Disk::Disck_LBA2CHS(uint32_t lba, uint16_t *cylinderOut, uint16_t *sectorsOut, uint16_t* headOut)  
+void DISK_LBA2CHS(DISK* disk, uint32_t lba, uint16_t* cylinderOut, uint16_t* sectorOut, uint16_t* headOut)
 {
-    *sectorsOut = lba % this->sectors + 1;
-    *cylinderOut = (lba / this->sectors) / this->heads;
-    *headOut = (lba / this->sectors) % this->heads;
+    // sector = (LBA % sectors per track + 1)
+    *sectorOut = lba % disk->sectors + 1;
+
+    // cylinder = (LBA / sectors per track) / heads
+    *cylinderOut = (lba / disk->sectors) / disk->heads;
+
+    // head = (LBA / sectors per track) % heads
+    *headOut = (lba / disk->sectors) % disk->heads;
 }
 
-bool Disk::readSectors(uint32_t lba, uint8_t sectorsToRead, uint8_t __far *dataOut)
+bool DISK_ReadSectors(DISK* disk, uint32_t lba, uint8_t sectors, void far* dataOut)
 {
     uint16_t cylinder, sector, head;
-    this->Disck_LBA2CHS(lba, &cylinder, &sector, &head);
 
-    int i = 0;
-    do
+    DISK_LBA2CHS(disk, lba, &cylinder, &sector, &head);
+
+    for (int i = 0; i < 3; i++)
     {
-        ++i;
-        if(x86_Disk_Read(this->id, cylinder, sector, head, sectorsToRead, dataOut))
+        if (x86_Disk_Read(disk->id, cylinder, sector, head, sectors, dataOut))
             return true;
-        x86_Disk_Reset(this->id);
 
-    } while (i <= 3);
+        x86_Disk_Reset(disk->id);
+    }
 
-    return false;    
-}
-
-uint8_t Disk::getId()  
-{
-    return this->id;
-}
-
-uint16_t Disk::getCylinders()  
-{
-    return this->cylinders;
-}
-
-uint16_t Disk::getSectors()  
-{
-    return this->sectors;
-}
-
-uint16_t Disk::getHeads()  
-{
-    return this->heads;
+    return false;
 }
