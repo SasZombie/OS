@@ -1,5 +1,4 @@
 #include "oioperations.hpp"
-#include "fat.hpp"
 #include "filestream.hpp"
 #include "disk.hpp"
 
@@ -8,11 +7,26 @@
 extern "C"{
     void _cdecl cstart_(unsigned short bootDrive)
     {
-        Disk disk(bootDrive);
-        char *str;
+        
+        // cout(x86_Create_Dir("MYDAR"));
 
-        cin(str);
-        cout(str);
+
+
+        Disk disk(bootDrive);
+
+    
+
+        // char buffer[100];
+        // uint32_t read;
+        // f.open("KERNAL  TXT");
+        // while ((read = f.read(sizeof(buffer), buffer)))
+        // {
+        //     for (uint32_t i = 0; i < read; i++)
+        //     {
+        //         cout(buffer[i]);
+        //     }
+        // }
+        // f.close();
 
         cout("\nEND");
     }

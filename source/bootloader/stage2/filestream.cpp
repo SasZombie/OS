@@ -3,20 +3,25 @@
 FFile::FFile(Disk &ndisk)
     : disk(ndisk)
 {
+    this->isOpned = false;
     FAT_Initialize(disk);
 }
 
 FFile::FFile(Disk &ndisk, const char *str)
     : disk(ndisk)
 {
+    this->isOpned = true;
     FAT_Initialize(disk);
     this->open(str);
 }
 
-
-
 void FFile::open(const char *str)
 {
+    if(this->isOpned)   //Guard
+    {
+        this->close();
+    }
+    this->isOpned = true;
     this->fd = FAT_Open(disk, str);
 }
 
@@ -27,6 +32,7 @@ bool FFile::readEntry()
 
 void FFile::close()
 {
+    this->isOpned = false;
     FAT_Close(this->fd);
 }
 

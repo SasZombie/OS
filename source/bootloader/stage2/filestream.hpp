@@ -7,6 +7,7 @@
 class FFile
 {
 private:
+    bool isOpned;
     Disk &disk;
     FAT_File __far* fd;
     FAT_DirectoryEntry entry;
@@ -23,5 +24,27 @@ public:
     uint32_t read(uint32_t byteCount, void* dataOut);
 
     char getEntry(unsigned i);
-
 };
+//Example of how to use cuz I always forget
+//       FFile f(bootDrive, "/");
+// int max = 0;
+// while (f.readEntry() && max < 5)
+// {
+//     for (int i = 0; i < 11; i++)
+//         cout(entry.Name[i]);
+//     cout("\n");
+// }
+//     f.close
+
+// 
+//     char buffer[100];
+//     uint32_t read;
+//     f.open("mydir/test.txt");
+//     while ((read = f.read(sizeof(buffer), buffer)))
+//     {
+//         for (uint32_t i = 0; i < read; i++)
+//         {
+//             cout(buffer[i]);
+//         }
+//     }
+//     f.close()

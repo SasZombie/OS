@@ -1,5 +1,7 @@
 bits 16
 
+section .data
+    dirname db "NEWDIR", 0 
 section _TEXT class=CODE
 
 global __wcpp_4_undefed_cdtor__
@@ -45,7 +47,7 @@ __U4D:
 
     ret
 
-global _x86_Video_WriteCharTeletype
+;MARK: CONVENTION
 ;CALL CONVENTION CDECL:
 ;ARGS: 
 ;       -PASSED THROUGH STACK
@@ -58,6 +60,8 @@ global _x86_Video_WriteCharTeletype
 ;       -EAX, ECX, EDX SAVED BY CALLER
 ;       -ALL OTHERS BY THE CALLEE; THAT IS ALL THE REGISTERS SHOULD BE RESTORED TO THE ORIGINAL VALUES BEFORE RETURINING!!
 ;NAME: PREPEND FUNCTIONS WITH _
+
+global _x86_Video_WriteCharTeletype
 _x86_Video_WriteCharTeletype:
 
     push bp
@@ -292,3 +296,47 @@ _x86_Read_Character:
     pop bp
 
     ret
+
+;void _cdecl x86_Create_File(char *fileName)
+global _x86_Create_File
+
+_x86_Create_File:
+    push bp
+    mov bp, sp 
+    
+    mov ah, 3Ch
+    mov cx, 0
+    mov si, [bp + 4]
+    mov dx, [si]
+
+    int 21h
+    
+    mov ax, 1
+    sbb ax, 0
+
+    mov sp, bp
+    pop bp
+    ret
+
+
+
+
+global _x86_Create_Dir
+
+_x86_Create_Dir:
+    push bp
+    mov bp, sp 
+    
+    mov ah, 39h
+    ; mov si, [bp + 4]
+    mov dx, dirname
+
+    int 21h
+    
+    mov ax, 1
+    sbb ax, 0
+
+    mov sp, bp
+    pop bp
+    ret
+

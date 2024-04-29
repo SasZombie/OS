@@ -38,23 +38,36 @@ void cout(unsigned long long number);
 //Works by deducing type of a
 //We cant do that since I cant include <ctype>
 
-// template<typename T>
-// void cin(T *var)
-// {
-//     char buff[100]; //Max chars read at once!
-//     char c;
-//     unsigned index = 0;
-//     while (c != 0x0D && index != 99)
-//     {
-//         x86_Read_Character(& c);
-//         buff[index] = c;
-//         ++index;
-//     }
-
-//     buff[index] = '\0';
-
-//     *var = buff;    
-// }
-
 void cin(char &var);
 void cin(char *var);
+
+template<typename T>
+void cin(T &var)
+{
+    var = 0;
+    char buff[23]; // Max digits read at once!
+    char c;
+    unsigned index = 0;
+    while (c != 0x0D && index != 22)
+    {
+        cin(c);
+        buff[index] = c;
+        ++index;
+    }
+    cout('\n');
+    buff[index] = '\0';
+    bool isNegative = false;
+
+    if(buff[0] == '-')
+        isNegative = true;
+        
+    unsigned size = strlen(buff);
+    for (unsigned int i = isNegative; i < size - 1; ++i)
+    {
+        var = var * 10 + (T)(buff[i] - '0');
+    }
+
+    if(isNegative)
+        var = -var;
+
+}

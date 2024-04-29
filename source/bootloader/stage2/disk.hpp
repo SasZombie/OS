@@ -18,4 +18,9 @@ public:
 
     Disk(uint8_t driveNumber);
     bool readSectors(uint32_t lba, uint8_t sectors, void __far* dataOut);
+
+    uint16_t getCylinderNumber();
+    uint16_t getSectorsNumber();
+    uint16_t getHeadsNumber();
+
 };

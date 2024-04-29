@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Apr  8 2024 01:46:11 (32-bit)
 Copyright (c) 2002-2024 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       24/04/29 11:12:44
+Created on:       24/04/29 16:43:14
 Executable Image: /home/saszombie/Coding/OS/build/stage2.bin
 creating a RAW Binary Image executable
 
@@ -13,7 +13,7 @@ creating a RAW Binary Image executable
 Group                           Address              Size
 =====                           =======              ====
 
-DGROUP                          00001d0e             000001be
+DGROUP                          00001e35             000001e7
 
 
 
@@ -25,11 +25,12 @@ Segment                Class          Group          Address         Size
 =======                =====          =====          =======         ====
 
 _ENTRY                 CODE           AUTO           00000000        00000013
-_TEXT                  CODE           AUTO           00000013        00001cfb
-CONST                  DATA           DGROUP         00001d0e        0000012b
-CONST2                 DATA           DGROUP         00001e39        00000000
-_DATA                  DATA           DGROUP         00001e40        0000007b
-_BSS                   BSS            DGROUP         00001ec0        0000000c
+_TEXT                  CODE           AUTO           00000013        00001e22
+CONST                  DATA           DGROUP         00001e35        0000013d
+CONST2                 DATA           DGROUP         00001f72        00000000
+_DATA                  DATA           DGROUP         00001f80        0000007b
+data                                  AUTO           00001ffb        00000007
+_BSS                   BSS            DGROUP         00002010        0000000c
 
 
                         +----------------+
@@ -55,63 +56,65 @@ Module: /home/saszombie/Coding/OS/build/stage2/asm/x86.obj(x86.asm)
 000000c8       _x86_Disk_Read
 000000ff       _x86_Disk_GetDriveParams
 00000143       _x86_Read_Character
+00000153*      _x86_Create_File
+0000016c       _x86_Create_Dir
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/chartype.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/chartype.cpp)
-00000153+      bool __near islower( char )
-00000191       char __near toupper( char )
+00000180+      bool __near islower( char )
+000001be       char __near toupper( char )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/cstring.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/cstring.cpp)
-000001d9       char const __near * __near strchr( char const __near *, char )
-00000234+      void __near strcpy( char __near *, char const __near * )
-0000027d       int unsigned __near strlen( char const __near * )
+00000206       char const __near * __near strchr( char const __near *, char )
+00000261+      void __near strcpy( char __near *, char const __near * )
+000002aa       int unsigned __near strlen( char const __near * )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/disk.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/disk.cpp)
-000002b8+      void __near Disk::DISK_LBA2CHS( long unsigned, short unsigned __near *, short unsigned __near *, short unsigned __near * )
-0000036e       __near Disk::Disk( char unsigned )
-000003e5       bool __near Disk::readSectors( long unsigned, char unsigned, void __far * )
+000002e5+      void __near Disk::DISK_LBA2CHS( long unsigned, short unsigned __near *, short unsigned __near *, short unsigned __near * )
+0000039b       __near Disk::Disk( char unsigned )
+00000412       bool __near Disk::readSectors( long unsigned, char unsigned, void __far * )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/fat.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/fat.cpp)
-00000488+      bool __near FAT_ReadBootSector( Disk __near & )
-000004d2+      bool __near FAT_ReadFat( Disk __near & )
-0000052c       bool __near FAT_Initialize( Disk __near & )
-00000755+      long unsigned __near FAT_ClusterToLba( long unsigned )
-000007ae+      FAT_File __far * __near FAT_OpenEntry( Disk __near &, FAT_DirectoryEntry __near * )
-00000972+      long unsigned __near FAT_NextCluster( long unsigned )
-000009fb       long unsigned __near FAT_Read( Disk __near &, FAT_File __far *, long unsigned, void __near * )
-00000ce7       bool __near FAT_ReadEntry( Disk __near &, FAT_File __far *, FAT_DirectoryEntry __near * )
-00000d40       void __near FAT_Close( FAT_File __far * )
-00000db7+      bool __near FAT_FindFile( Disk __near &, FAT_File __far *, char const __near *, FAT_DirectoryEntry __near * )
-00001065+      long unsigned __near min<long unsigned __near >( long unsigned, long unsigned )
-00000efc       FAT_File __far * __near FAT_Open( Disk __near &, char const __near * )
+000004b5+      bool __near FAT_ReadBootSector( Disk __near & )
+000004ff+      bool __near FAT_ReadFat( Disk __near & )
+00000559       bool __near FAT_Initialize( Disk __near & )
+00000782+      long unsigned __near FAT_ClusterToLba( long unsigned )
+000007db+      FAT_File __far * __near FAT_OpenEntry( Disk __near &, FAT_DirectoryEntry __near * )
+0000099f+      long unsigned __near FAT_NextCluster( long unsigned )
+00000a28       long unsigned __near FAT_Read( Disk __near &, FAT_File __far *, long unsigned, void __near * )
+00000d14       bool __near FAT_ReadEntry( Disk __near &, FAT_File __far *, FAT_DirectoryEntry __near * )
+00000d6d       void __near FAT_Close( FAT_File __far * )
+00000de4+      bool __near FAT_FindFile( Disk __near &, FAT_File __far *, char const __near *, FAT_DirectoryEntry __near * )
+00001092+      long unsigned __near min<long unsigned __near >( long unsigned, long unsigned )
+00000f29       FAT_File __far * __near FAT_Open( Disk __near &, char const __near * )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/filestream.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/filestream.cpp)
-000010c2+      __near FFile::FFile( Disk __near & )
-000010f7+      __near FFile::FFile( Disk __near &, char const __near * )
-00001136+      void __near FFile::open( char const __near * )
-0000116d+      bool __near FFile::readEntry()
-000011bf+      void __near FFile::close()
-000011eb+      long unsigned __near FFile::read( long unsigned, void __near * )
-0000123d+      char __near FFile::getEntry( int unsigned )
+000010ef+      __near FFile::FFile( Disk __near & )
+0000112c       __near FFile::FFile( Disk __near &, char const __near * )
+00001173       void __near FFile::open( char const __near * )
+000011c4       bool __near FFile::readEntry()
+00001217       void __near FFile::close()
+00001249+      long unsigned __near FFile::read( long unsigned, void __near * )
+0000129c       char __near FFile::getEntry( int unsigned )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/main.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/main.cpp)
-00001268       _cstart_
+000012c7       _cstart_
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/memory.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/memory.cpp)
-00001297       void __far * __near memcpy( void __far *, void const __far *, short unsigned )
-0000130b       void __far * __near memset( void __far *, int, short unsigned )
-0000136a       int __near memcmp( void const __far *, void const __far *, short unsigned )
+000013be       void __far * __near memcpy( void __far *, void const __far *, short unsigned )
+00001432       void __far * __near memset( void __far *, int, short unsigned )
+00001491       int __near memcmp( void const __far *, void const __far *, short unsigned )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/oioperations.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/oioperations.cpp)
-000013e3+      void __near cout( char )
-00001425+      void __near cout( char const __far * )
-0000145c+      void __near cout( char const __near * )
-00001490       void __near cout( char __near * )
-000014c4+      void __near cout( int )
-0000159c+      void __near cout( short )
-00001674+      void __near cout( float, short unsigned )
-0000168c+      void __near cout( double, int )
-000016a4+      void __near cout( int unsigned )
-00001765+      void __near cout( short unsigned )
-00001826+      void __near cout( long )
-00001915+      void __near cout( __int64 )
-00001a2f+      void __near cout( long unsigned )
-00001af4+      void __near cout( __int64 unsigned )
-00001bbf       void __near cin( char __near * )
-00001c46+      void __near cin( char __near & )
+0000150a       void __near cout( char )
+0000154c+      void __near cout( char const __far * )
+00001583+      void __near cout( char const __near * )
+000015b7       void __near cout( char __near * )
+000015eb       void __near cout( int )
+000016c3+      void __near cout( short )
+0000179b+      void __near cout( float, short unsigned )
+000017b3+      void __near cout( double, int )
+000017cb+      void __near cout( int unsigned )
+0000188c+      void __near cout( short unsigned )
+0000194d+      void __near cout( long )
+00001a3c+      void __near cout( __int64 )
+00001b56+      void __near cout( long unsigned )
+00001c1b+      void __near cout( __int64 unsigned )
+00001ce6+      void __near cin( char __near * )
+00001d6d+      void __near cin( char __near & )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/utility.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/utility.cpp)
-00001c75+      long unsigned __near align( long unsigned, long unsigned )
+00001d9c+      long unsigned __near align( long unsigned, long unsigned )
 
 
                         +---------------------+
@@ -125,70 +128,71 @@ Module          Segment               Class           Address         Size
 ======          =======               =====           =======         ====
 
 main.asm        _ENTRY                CODE           00000000         00000013
-x86.asm         _TEXT                 CODE           00000013         00000140
+x86.asm         data                                 00001ffb         00000007
+                _TEXT                 CODE           00000013         0000016d
 /home/saszombie/Coding/OS/source/bootloader/stage2/chartype.cpp
-                _TEXT                 CODE           00000153         00000086
-                CONST                 DATA           00001d0e         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ec0         00000000
+                _TEXT                 CODE           00000180         00000086
+                CONST                 DATA           00001e35         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            00002010         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/cstring.cpp
-                _TEXT                 CODE           000001d9         000000df
-                CONST                 DATA           00001d0e         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ec0         00000000
+                _TEXT                 CODE           00000206         000000df
+                CONST                 DATA           00001e35         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            00002010         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/disk.cpp
-                _TEXT                 CODE           000002b8         000001d0
-                CONST                 DATA           00001d0e         00000018
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ec0         00000000
+                _TEXT                 CODE           000002e5         000001d0
+                CONST                 DATA           00001e35         00000018
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            00002010         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/fat.cpp
-                _TEXT                 CODE           00000488         00000bdd
-                CONST                 DATA           00001d26         0000010e
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ec0         0000000c
-                _TEXT                 CODE           00001065 c       0000005d
+                _TEXT                 CODE           000004b5         00000bdd
+                CONST                 DATA           00001e4d         0000010e
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            00002010         0000000c
+                _TEXT                 CODE           00001092 c       0000005d
 /home/saszombie/Coding/OS/source/bootloader/stage2/filestream.cpp
-                _TEXT                 CODE           000010c2         000001a6
-                CONST                 DATA           00001e34         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ecc         00000000
+                _TEXT                 CODE           000010ef         000001d8
+                CONST                 DATA           00001f5b         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            0000201c         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/main.cpp
-                _TEXT                 CODE           00001268         0000002f
-                CONST                 DATA           00001e34         00000005
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ecc         00000000
+                _TEXT                 CODE           000012c7         000000f7
+                CONST                 DATA           00001f5b         00000017
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            0000201c         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/memory.cpp
-                _TEXT                 CODE           00001297         0000014c
-                CONST                 DATA           00001e39         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ecc         00000000
+                _TEXT                 CODE           000013be         0000014c
+                CONST                 DATA           00001f72         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            0000201c         00000000
 /home/saszombie/Coding/OS/source/bootloader/stage2/oioperations.cpp
-                _TEXT                 CODE           000013e3         00000892
-                CONST                 DATA           00001e39         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001e40         00000000
-                _BSS                  BSS            00001ecc         00000000
-                _DATA                 DATA           00001e40 c       00000010
-                _DATA                 DATA           00001e50 c       00000010
-                _DATA                 DATA           00001e60 c       00000010
-                _DATA                 DATA           00001e70 c       00000010
-                _DATA                 DATA           00001e80 c       00000010
-                _DATA                 DATA           00001e90 c       00000010
-                _DATA                 DATA           00001ea0 c       00000010
-                _DATA                 DATA           00001eb0 c       0000000b
+                _TEXT                 CODE           0000150a         00000892
+                CONST                 DATA           00001f72         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001f80         00000000
+                _BSS                  BSS            0000201c         00000000
+                _DATA                 DATA           00001f80 c       00000010
+                _DATA                 DATA           00001f90 c       00000010
+                _DATA                 DATA           00001fa0 c       00000010
+                _DATA                 DATA           00001fb0 c       00000010
+                _DATA                 DATA           00001fc0 c       00000010
+                _DATA                 DATA           00001fd0 c       00000010
+                _DATA                 DATA           00001fe0 c       00000010
+                _DATA                 DATA           00001ff0 c       0000000b
 /home/saszombie/Coding/OS/source/bootloader/stage2/utility.cpp
-                _TEXT                 CODE           00001c75         00000099
-                CONST                 DATA           00001e39         00000000
-                CONST2                DATA           00001e39         00000000
-                _DATA                 DATA           00001ebb         00000000
-                _BSS                  BSS            00001ecc         00000000
+                _TEXT                 CODE           00001d9c         00000099
+                CONST                 DATA           00001f72         00000000
+                CONST2                DATA           00001f72         00000000
+                _DATA                 DATA           00001ffb         00000000
+                _BSS                  BSS            0000201c         00000000
 Warning! W1014: stack segment not found
 
 
@@ -197,6 +201,6 @@ Warning! W1014: stack segment not found
                         +-----------------------+
 
 Stack size:  0200 (512.)
-Memory size:  1ecc (7884.)
+Memory size:  201c (8220.)
 Entry point address: 00000000
 Link time: 00:00.00

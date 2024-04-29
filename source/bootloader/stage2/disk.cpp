@@ -39,3 +39,18 @@ bool Disk::readSectors(uint32_t lba, uint8_t sectors, void __far *dataOut)
 
     return false;
 }
+
+uint16_t Disk::getCylinderNumber()
+{
+    return this->cylinders;
+}
+
+uint16_t Disk::getSectorsNumber()
+{
+    return this->sectors;
+}
+
+uint16_t Disk::getHeadsNumber()
+{
+    return this->heads;
+}
