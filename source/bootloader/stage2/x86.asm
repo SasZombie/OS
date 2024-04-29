@@ -216,40 +216,6 @@ _x86_Disk_Read:
     mov sp, bp
     pop bp
     ret
-
-    ; push bp
-    ; mov bp, sp 
-
-    ; push bx
-    ; push es
-
-    ; mov ah, 02h
-    ; mov al, [bp + 10]
-    ; and al, 3Fh         ;Clear the first 5 bits 3Fh = 0011111
-    ; or cl, al 
-
-    ; mov dl, [bp + 4]
-
-    ; mov ch, [bp + 6]
-    ; mov cl, [bp + 7]
-    ; shl cl, 6
-    
-    ; mov dh, [bp + 8]
-
-    ; mov bx, [bp + 16] ; Far Pointer to data Out 
-    ; mov es, bx
-    ; mov bx, [bp + 14]
-
-    ; stc 
-    ; int 13h
-
-
-    ; pop bx
-    ; pop es
-
-    ; mov sp, bp
-    ; pop bp
-    ; ret
 ; void _cdecl x86_Disk_GetDriveParams(uint8_t drive, uint8_t *driveTypeOut, uint16_t* cylinderOut, uint16_t *sectorsOut, uint16_t *headsOut);
 
 global _x86_Disk_GetDriveParams
@@ -306,4 +272,23 @@ _x86_Disk_GetDriveParams:
 
     mov sp, bp 
     pop bp 
+    ret
+
+; char _cdecl x86_Read_Character();
+
+global _x86_Read_Character
+
+_x86_Read_Character:
+    push bp
+    mov bp, sp 
+
+    mov ah, 0
+    int 16h
+
+    mov si, [bp + 4]
+    mov [si], al
+
+    mov sp, bp
+    pop bp
+
     ret

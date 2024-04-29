@@ -1,5 +1,10 @@
 #pragma once
+#include "x86.hpp"
+#include "cstring.hpp"
+#include "stdint.hpp"
 
+
+//Printing
 #define LONG_NUMBERS
 // #define FLOAT_NUMBERS
 // #define DOUBLE_NUMBERS
@@ -27,3 +32,58 @@ void cout(long long number);
 void cout(unsigned long number);
 void cout(unsigned long long number);
 #endif
+
+//Reading
+// cin >> a
+//Works by deducing type of a
+//We cant do that since I cant include <ctype>
+
+// template<typename T>
+// void cin(T *var)
+// {
+//     char buff[100]; //Max chars read at once!
+//     char c;
+//     unsigned index = 0;
+//     while (c != 0x0D && index != 99)
+//     {
+//         x86_Read_Character(& c);
+//         buff[index] = c;
+//         ++index;
+//     }
+
+//     buff[index] = '\0';
+
+//     *var = buff;    
+// }
+
+void cin(char &var)
+{
+    x86_Read_Character(&var);
+    cout(var);
+}
+
+void cin(char *var)
+{
+    char buff[100]; //Max chars read at once!
+    char c;
+    unsigned index = 0;
+    while (c != 0x0D && index != 99)
+    {
+        cin(c);
+        buff[index] = c;
+        ++index;
+    }
+
+    
+    buff[index] = '\0';
+
+    unsigned size = strlen(buff);
+    for(unsigned int i = 0; i < size; ++i)
+    {
+        // if(var[i] == '\0')
+            // break;
+        var[i] = buff[i];
+    }
+    
+
+}

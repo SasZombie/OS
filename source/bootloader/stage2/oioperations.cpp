@@ -1,7 +1,5 @@
 #pragma once
 #include "oioperations.hpp"
-#include "x86.hpp"
-#include "stdint.hpp"
 
 #define __I4M
 
