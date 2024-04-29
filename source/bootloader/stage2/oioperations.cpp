@@ -3,19 +3,17 @@
 
 #define __I4M
 
-
 void cout(char c)
 {
-    if(c == '\n')
+    if (c == '\n')
         x86_Video_WriteCharTeletype('\r', 0);
 
     x86_Video_WriteCharTeletype(c, 0);
-
 }
 
 void cout(const char __far *str)
 {
-    while(*str)
+    while (*str)
     {
         cout(*str);
         ++str;
@@ -39,7 +37,7 @@ void cout(char *str)
     }
 }
 
-template<typename T>
+template <typename T>
 static inline void printSinged(T number)
 {
 
@@ -47,15 +45,15 @@ static inline void printSinged(T number)
     char buffer[20];
     short i = 0;
     int negative = 1;
-    if(number < 0)
+    if (number < 0)
     {
         cout('-');
         number = -number;
-    }   
-    //Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number 
-    //By another 64 number. 
-    //Normal / and % would create problems if number is big
-    //And long, long long wouldnt even compile since it calls to external lib
+    }
+    // Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number
+    // By another 64 number.
+    // Normal / and % would create problems if number is big
+    // And long, long long wouldnt even compile since it calls to external lib
     unsigned long radix = 10;
     unsigned long long divident = static_cast<unsigned long long>(number);
 
@@ -64,42 +62,41 @@ static inline void printSinged(T number)
         uint32_t rem;
         x86_div64_32(divident, radix, &divident, &rem);
         buffer[i++] = numbers[rem];
-    }while(divident);
+    } while (divident);
 
     --i;
-    while(i >= 0)
+    while (i >= 0)
     {
-        cout(static_cast<char>(buffer[i]));    
+        cout(static_cast<char>(buffer[i]));
         --i;
     }
 }
 
-
-template<typename T>
+template <typename T>
 static inline void printUnsinged(T number)
 {
     char numbers[] = "0123456789";
     char buffer[20];
-    short i = 0; 
+    short i = 0;
 
-    //Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number 
-    //By another 64 number. 
-    //Normal / and % would create problems if number is big
-    //And long, long long wouldnt even compile since it calls to external lib
+    // Compiler casts to the biggest type possible! But at the same time in 16 bit real mode, it doesnt know how to divide a 64 number
+    // By another 64 number.
+    // Normal / and % would create problems if number is big
+    // And long, long long wouldnt even compile since it calls to external lib
     unsigned long radix = 10;
     unsigned long long divident = static_cast<unsigned long long>(number);
-    
+
     do
     {
         uint32_t rem;
         x86_div64_32(divident, radix, &divident, &rem);
         buffer[i++] = numbers[rem];
-    }while(divident);
+    } while (divident);
 
     --i;
-    while(i >= 0)
+    while (i >= 0)
     {
-        cout(static_cast<char>(buffer[i]));    
+        cout(static_cast<char>(buffer[i]));
         --i;
     }
 }
@@ -121,11 +118,11 @@ void cout(float number, unsigned short decimals)
     char numbers[] = "0123456789";
     char buffer[40];
     short i = 0;
-    if(number < 0)
+    if (number < 0)
     {
         cout('-');
         number = -number;
-    }   
+    }
 
     unsigned int integerPart = static_cast<int>(number);
     float frac_part = number - integerPart;
@@ -136,13 +133,12 @@ void cout(float number, unsigned short decimals)
         buffer[i++] = numbers[digit];
         integerPart = integerPart / 10;
 
-    }while(integerPart);
-
+    } while (integerPart);
 
     buffer[i++] = '.';
 
     for (int j = 0; j < decimals; j++)
-    { 
+    {
         frac_part *= 10;
         int digit = static_cast<int>(frac_part);
         buffer[i++] = numbers[digit];
@@ -153,22 +149,21 @@ void cout(float number, unsigned short decimals)
 #else
     (void)number;
     (void)decimals;
-#endif   
+#endif
 }
 
 void cout(double number, int decimals)
 {
 
-
 #ifdef DOUBLE_NUMBERS
     char numbers[] = "0123456789";
     char buffer[40];
     short i = 0;
-    if(number < 0)
+    if (number < 0)
     {
         cout('-');
         number = -number;
-    }   
+    }
 
     unsigned int integerPart = static_cast<int>(number);
     double frac_part = number - integerPart;
@@ -179,13 +174,12 @@ void cout(double number, int decimals)
         buffer[i++] = numbers[digit];
         integerPart = integerPart / 10;
 
-    }while(integerPart);
-
+    } while (integerPart);
 
     buffer[i++] = '.';
 
     for (int j = 0; j < decimals; j++)
-    { 
+    {
         frac_part *= 10;
         int digit = static_cast<int>(frac_part);
         buffer[i++] = numbers[digit];
@@ -196,12 +190,12 @@ void cout(double number, int decimals)
 #else
     (void)number;
     (void)decimals;
-#endif   
+#endif
 }
 
 void cout(unsigned int number)
 {
-    printUnsinged(number);   
+    printUnsinged(number);
 }
 
 void cout(unsigned short number)
@@ -230,3 +224,33 @@ void cout(unsigned long long number)
     printUnsinged(number);
 }
 #endif
+
+void cin(char *var)
+{
+    char buff[100]; // Max chars read at once!
+    char c;
+    unsigned index = 0;
+    while (c != 0x0D && index != 99)
+    {
+        cin(c);
+        buff[index] = c;
+        ++index;
+    }
+    cout('\n');
+
+    buff[index] = '\0';
+
+    unsigned size = strlen(buff);
+    for (unsigned int i = 0; i < size; ++i)
+    {
+        var[i] = buff[i];
+    }
+
+    var[size] = '\0';
+}
+
+void cin(char &var)
+{
+    x86_Read_Character(&var);
+    cout(var);
+}

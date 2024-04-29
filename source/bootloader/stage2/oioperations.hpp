@@ -56,34 +56,5 @@ void cout(unsigned long long number);
 //     *var = buff;    
 // }
 
-void cin(char &var)
-{
-    x86_Read_Character(&var);
-    cout(var);
-}
-
-void cin(char *var)
-{
-    char buff[100]; //Max chars read at once!
-    char c;
-    unsigned index = 0;
-    while (c != 0x0D && index != 99)
-    {
-        cin(c);
-        buff[index] = c;
-        ++index;
-    }
-
-    
-    buff[index] = '\0';
-
-    unsigned size = strlen(buff);
-    for(unsigned int i = 0; i < size; ++i)
-    {
-        // if(var[i] == '\0')
-            // break;
-        var[i] = buff[i];
-    }
-    
-
-}
+void cin(char &var);
+void cin(char *var);
