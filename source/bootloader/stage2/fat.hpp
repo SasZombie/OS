@@ -11,7 +11,7 @@
 
 #pragma pack(push, 1)
 
-typedef struct 
+struct FAT_DirectoryEntry
 {
     uint8_t Name[11];
     uint8_t Attributes;
@@ -25,17 +25,22 @@ typedef struct
     uint16_t ModifiedDate;
     uint16_t FirstClusterLow;
     uint32_t Size;
-} FAT_DirectoryEntry;
+};
 
 #pragma pack(pop)
+//This is FAT16 structure! We need it to be backed, that is, the compiler should not add padding so we have to 
+//Use structs
 
-typedef struct 
+struct FAT_File
 {
     int Handle;
     bool IsDirectory;
     uint32_t Position;
     uint32_t Size;
-} FAT_File;
+};
+
+//We also are dealing with __fat*. If we use a class this->method() is a near pointer, so the model is going to be near
+//We need to use structs with far pointers
 
 enum FAT_Attributes
 {
@@ -49,7 +54,7 @@ enum FAT_Attributes
 };
 
 bool FAT_Initialize(Disk & disk);
-FAT_File far* FAT_Open(Disk & disk, const char* path);
-uint32_t FAT_Read(Disk & disk, FAT_File far* file, uint32_t byteCount, void* dataOut);
-bool FAT_ReadEntry(Disk & disk, FAT_File far* file, FAT_DirectoryEntry* dirEntry);
-void FAT_Close(FAT_File far* file);
+FAT_File __far* FAT_Open(Disk & disk, const char* path);
+uint32_t FAT_Read(Disk & disk, FAT_File __far* file, uint32_t byteCount, void* dataOut);
+bool FAT_ReadEntry(Disk & disk, FAT_File __far* file, FAT_DirectoryEntry* dirEntry);
+void FAT_Close(FAT_File __far* file);

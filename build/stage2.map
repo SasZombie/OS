@@ -1,7 +1,7 @@
 Open Watcom Linker Version 2.0 beta Apr  8 2024 01:46:11 (32-bit)
 Copyright (c) 2002-2024 The Open Watcom Contributors. All Rights Reserved.
 Portions Copyright (c) 1985-2002 Sybase, Inc. All Rights Reserved.
-Created on:       24/04/29 09:52:10
+Created on:       24/04/29 09:59:30
 Executable Image: /home/saszombie/Coding/OS/build/stage2.bin
 creating a RAW Binary Image executable
 
@@ -70,14 +70,14 @@ Module: /home/saszombie/Coding/OS/build/stage2/cpp/fat.obj(/home/saszombie/Codin
 000004c2+      bool __near FAT_ReadFat( Disk __near & )
 0000051c       bool __near FAT_Initialize( Disk __near & )
 00000745+      long unsigned __near FAT_ClusterToLba( long unsigned )
-0000079e+      __1GRFJ0FAT_File __far * __near FAT_OpenEntry( Disk __near &, __2UQG3PFAT_DirectoryEntry __near * )
+0000079e+      FAT_File __far * __near FAT_OpenEntry( Disk __near &, FAT_DirectoryEntry __near * )
 00000962+      long unsigned __near FAT_NextCluster( long unsigned )
-000009eb       long unsigned __near FAT_Read( Disk __near &, __1GRFJ0FAT_File __far *, long unsigned, void __near * )
-00000cd7       bool __near FAT_ReadEntry( Disk __near &, __1GRFJ0FAT_File __far *, __2UQG3PFAT_DirectoryEntry __near * )
-00000d30       void __near FAT_Close( __1GRFJ0FAT_File __far * )
+000009eb       long unsigned __near FAT_Read( Disk __near &, FAT_File __far *, long unsigned, void __near * )
+00000cd7       bool __near FAT_ReadEntry( Disk __near &, FAT_File __far *, FAT_DirectoryEntry __near * )
+00000d30       void __near FAT_Close( FAT_File __far * )
+00000da7+      bool __near FAT_FindFile( Disk __near &, FAT_File __far *, char const __near *, FAT_DirectoryEntry __near * )
 00001055+      long unsigned __near min<long unsigned __near >( long unsigned, long unsigned )
-00000da7+      bool __near FAT_FindFile( Disk __near &, __1GRFJ0FAT_File __far *, char const __near *, __2UQG3PFAT_DirectoryEntry __near * )
-00000eec       __1GRFJ0FAT_File __far * __near FAT_Open( Disk __near &, char const __near * )
+00000eec       FAT_File __far * __near FAT_Open( Disk __near &, char const __near * )
 Module: /home/saszombie/Coding/OS/build/stage2/cpp/main.obj(/home/saszombie/Coding/OS/source/bootloader/stage2/main.cpp)
 000010b2       _cstart_
 00001d60+      void __far * __near g_data

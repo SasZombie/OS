@@ -8,7 +8,7 @@
 #define NULL        '\0'
 #pragma pack(push, 1)
 
-typedef struct 
+struct FAT_BootSector
 {
     uint8_t BootJumpInstruction[3];
     uint8_t OemIdentifier[8];
@@ -25,22 +25,20 @@ typedef struct
     uint32_t HiddenSectors;
     uint32_t LargeSectorCount;
 
-    // extended boot record
+    //BOOT RECORD
     uint8_t DriveNumber;
     uint8_t _Reserved;
     uint8_t Signature;
-    uint32_t VolumeId;          // serial number, value doesn't matter
+    uint32_t VolumeId;          // serial number
     uint8_t VolumeLabel[11];    // 11 bytes, padded with spaces
     uint8_t SystemId[8];
 
-    // ... we don't care about code ...
-
-} FAT_BootSector;
+};
 
 #pragma pack(pop)
 
 
-typedef struct
+struct FAT_FileData
 {
     uint8_t Buffer[SECTOR_SIZE];
     FAT_File Public;
@@ -49,9 +47,9 @@ typedef struct
     uint32_t CurrentCluster;
     uint32_t CurrentSectorInCluster;
 
-} FAT_FileData;
+};
 
-typedef struct
+ struct FAT_Data
 {
     union
     {
@@ -63,10 +61,10 @@ typedef struct
 
     FAT_FileData OpenedFiles[MAX_FILE_HANDLES];
 
-} FAT_Data;
+};
 
-static FAT_Data far* g_Data;
-static uint8_t far* g_Fat = NULL;
+static FAT_Data __far* g_Data;
+static uint8_t __far* g_Fat = NULL;
 static uint32_t g_DataSectionLba;
 
 
@@ -82,7 +80,7 @@ bool FAT_ReadFat(Disk & disk)
 
 bool FAT_Initialize(Disk & disk)
 {
-    g_Data = (FAT_Data far*)MEMORY_FAT_ADDR;
+    g_Data = (FAT_Data __far*)MEMORY_FAT_ADDR;
 
     // read boot sector
     if (!FAT_ReadBootSector(disk))
@@ -92,7 +90,7 @@ bool FAT_Initialize(Disk & disk)
     }
 
     // read FAT
-    g_Fat = (uint8_t far*)g_Data + sizeof(FAT_Data);
+    g_Fat = (uint8_t __far*)g_Data + sizeof(FAT_Data);
     uint32_t fatSize = g_Data->BS.BootSector.BytesPerSector * g_Data->BS.BootSector.SectorsPerFat;
     if (sizeof(FAT_Data) + fatSize >= MEMORY_FAT_SIZE)
     {
@@ -141,7 +139,7 @@ uint32_t FAT_ClusterToLba(uint32_t cluster)
     return g_DataSectionLba + (cluster - 2) * g_Data->BS.BootSector.SectorsPerCluster;
 }
 
-FAT_File far* FAT_OpenEntry(Disk & disk, FAT_DirectoryEntry* entry)
+FAT_File __far* FAT_OpenEntry(Disk & disk, FAT_DirectoryEntry* entry)
 {
     // find empty handle
     int handle = -1;
@@ -159,7 +157,7 @@ FAT_File far* FAT_OpenEntry(Disk & disk, FAT_DirectoryEntry* entry)
     }
 
     // setup vars
-    FAT_FileData far* fd = &g_Data->OpenedFiles[handle];
+    FAT_FileData __far* fd = &g_Data->OpenedFiles[handle];
     fd->Public.Handle = handle;
     fd->Public.IsDirectory = (entry->Attributes & FAT_ATTRIBUTE_DIRECTORY) != 0;
     fd->Public.Position = 0;
@@ -183,15 +181,15 @@ uint32_t FAT_NextCluster(uint32_t currentCluster)
     uint32_t fatIndex = currentCluster * 3 / 2;
 
     if (currentCluster % 2 == 0)
-        return (*(uint16_t far*)(g_Fat + fatIndex)) & 0x0FFF;
+        return (*(uint16_t __far*)(g_Fat + fatIndex)) & 0x0FFF;
     else
-        return (*(uint16_t far*)(g_Fat + fatIndex)) >> 4;
+        return (*(uint16_t __far*)(g_Fat + fatIndex)) >> 4;
 }
 
-uint32_t FAT_Read(Disk & disk, FAT_File far* file, uint32_t byteCount, void* dataOut)
+uint32_t FAT_Read(Disk & disk, FAT_File __far* file, uint32_t byteCount, void* dataOut)
 {
     // get file data
-    FAT_FileData far* fd = (file->Handle == ROOT_DIRECTORY_HANDLE) 
+    FAT_FileData __far* fd = (file->Handle == ROOT_DIRECTORY_HANDLE) 
         ? &g_Data->RootDirectory 
         : &g_Data->OpenedFiles[file->Handle];
 
@@ -256,12 +254,12 @@ uint32_t FAT_Read(Disk & disk, FAT_File far* file, uint32_t byteCount, void* dat
     return u8DataOut - (uint8_t*)dataOut;
 }
 
-bool FAT_ReadEntry(Disk & disk, FAT_File far* file, FAT_DirectoryEntry* dirEntry)
+bool FAT_ReadEntry(Disk & disk, FAT_File __far* file, FAT_DirectoryEntry* dirEntry)
 {
     return FAT_Read(disk, file, sizeof(FAT_DirectoryEntry), dirEntry) == sizeof(FAT_DirectoryEntry);
 }
 
-void FAT_Close(FAT_File far* file)
+void FAT_Close(FAT_File __far* file)
 {
     if (file->Handle == ROOT_DIRECTORY_HANDLE)
     {
@@ -274,7 +272,7 @@ void FAT_Close(FAT_File far* file)
     }
 }
 
-bool FAT_FindFile(Disk & disk, FAT_File far* file, const char* name, FAT_DirectoryEntry* entryOut)
+bool FAT_FindFile(Disk & disk, FAT_File __far* file, const char* name, FAT_DirectoryEntry* entryOut)
 {
     char fatName[12];
     FAT_DirectoryEntry entry;
@@ -308,7 +306,7 @@ bool FAT_FindFile(Disk & disk, FAT_File far* file, const char* name, FAT_Directo
     return false;
 }
 
-FAT_File far* FAT_Open(Disk & disk, const char* path)
+FAT_File __far* FAT_Open(Disk & disk, const char* path)
 {
     char name[MAX_PATH_SIZE];
 
@@ -316,7 +314,7 @@ FAT_File far* FAT_Open(Disk & disk, const char* path)
     if (path[0] == '/')
         path++;
 
-    FAT_File far* current = &g_Data->RootDirectory.Public;
+    FAT_File __far* current = &g_Data->RootDirectory.Public;
 
     while (*path) {
         // extract next file name from path
