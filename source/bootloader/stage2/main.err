@@ -1,4 +1,4 @@
-main.cpp(12): Warning! W389: col(19) integral value may be truncated during assignment or initialization
-main.cpp(39): Warning! W391: col(18) assignment found in boolean expression
-main.cpp(50): Warning! W128: col(4) initializer for variable 'i' cannot be bypassed
-main.cpp(25): Note! N392: col(9) definition: 'int i' in 'void __cdecl cstart_( unsigned short )'
+main.cpp(13): Warning! W389: col(19) integral value may be truncated during assignment or initialization
+main.cpp(36): Warning! W391: col(22) assignment found in boolean expression
+main.cpp(50): Warning! W017: col(5) label 'end' has not been referenced by a goto
+main.cpp(50): Note! N574: col(5) label defined in: main.cpp(47) (col 4)
