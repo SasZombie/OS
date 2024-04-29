@@ -70,17 +70,17 @@ static uint8_t far* g_Fat = NULL;
 static uint32_t g_DataSectionLba;
 
 
-bool FAT_ReadBootSector(DISK* disk)
+bool FAT_ReadBootSector(Disk & disk)
 {
-    return DISK_ReadSectors(disk, 0, 1, g_Data->BS.BootSectorBytes);
+    return disk.readSectors( 0, 1, g_Data->BS.BootSectorBytes);
 }
 
-bool FAT_ReadFat(DISK* disk)
+bool FAT_ReadFat(Disk & disk)
 {
-    return DISK_ReadSectors(disk, g_Data->BS.BootSector.ReservedSectors, g_Data->BS.BootSector.SectorsPerFat, g_Fat);
+    return disk.readSectors( g_Data->BS.BootSector.ReservedSectors, g_Data->BS.BootSector.SectorsPerFat, g_Fat);
 }
 
-bool FAT_Initialize(DISK* disk)
+bool FAT_Initialize(Disk & disk)
 {
     g_Data = (FAT_Data far*)MEMORY_FAT_ADDR;
 
@@ -119,7 +119,7 @@ bool FAT_Initialize(DISK* disk)
     g_Data->RootDirectory.CurrentCluster = rootDirLba;
     g_Data->RootDirectory.CurrentSectorInCluster = 0;
 
-    if (!DISK_ReadSectors(disk, rootDirLba, 1, g_Data->RootDirectory.Buffer))
+    if (!disk.readSectors( rootDirLba, 1, g_Data->RootDirectory.Buffer))
     {
         cout("FAT: read root directory failed\n");
         return false;
@@ -141,7 +141,7 @@ uint32_t FAT_ClusterToLba(uint32_t cluster)
     return g_DataSectionLba + (cluster - 2) * g_Data->BS.BootSector.SectorsPerCluster;
 }
 
-FAT_File far* FAT_OpenEntry(DISK* disk, FAT_DirectoryEntry* entry)
+FAT_File far* FAT_OpenEntry(Disk & disk, FAT_DirectoryEntry* entry)
 {
     // find empty handle
     int handle = -1;
@@ -168,7 +168,7 @@ FAT_File far* FAT_OpenEntry(DISK* disk, FAT_DirectoryEntry* entry)
     fd->CurrentCluster = fd->FirstCluster;
     fd->CurrentSectorInCluster = 0;
 
-    if (!DISK_ReadSectors(disk, FAT_ClusterToLba(fd->CurrentCluster), 1, fd->Buffer))
+    if (!disk.readSectors( FAT_ClusterToLba(fd->CurrentCluster), 1, fd->Buffer))
     {
         cout("FAT: read error\n");
         return false;
@@ -188,7 +188,7 @@ uint32_t FAT_NextCluster(uint32_t currentCluster)
         return (*(uint16_t far*)(g_Fat + fatIndex)) >> 4;
 }
 
-uint32_t FAT_Read(DISK* disk, FAT_File far* file, uint32_t byteCount, void* dataOut)
+uint32_t FAT_Read(Disk & disk, FAT_File far* file, uint32_t byteCount, void* dataOut)
 {
     // get file data
     FAT_FileData far* fd = (file->Handle == ROOT_DIRECTORY_HANDLE) 
@@ -221,7 +221,7 @@ uint32_t FAT_Read(DISK* disk, FAT_File far* file, uint32_t byteCount, void* data
                 ++fd->CurrentCluster;
 
                 // read next sector
-                if (!DISK_ReadSectors(disk, fd->CurrentCluster, 1, fd->Buffer))
+                if (!disk.readSectors( fd->CurrentCluster, 1, fd->Buffer))
                 {
                     cout("FAT: read error!\n");
                     break;
@@ -244,7 +244,7 @@ uint32_t FAT_Read(DISK* disk, FAT_File far* file, uint32_t byteCount, void* data
                 }
 
                 // read next sector
-                if (!DISK_ReadSectors(disk, FAT_ClusterToLba(fd->CurrentCluster) + fd->CurrentSectorInCluster, 1, fd->Buffer))
+                if (!disk.readSectors( FAT_ClusterToLba(fd->CurrentCluster) + fd->CurrentSectorInCluster, 1, fd->Buffer))
                 {
                     cout("FAT: read error!\n");
                     break;
@@ -256,7 +256,7 @@ uint32_t FAT_Read(DISK* disk, FAT_File far* file, uint32_t byteCount, void* data
     return u8DataOut - (uint8_t*)dataOut;
 }
 
-bool FAT_ReadEntry(DISK* disk, FAT_File far* file, FAT_DirectoryEntry* dirEntry)
+bool FAT_ReadEntry(Disk & disk, FAT_File far* file, FAT_DirectoryEntry* dirEntry)
 {
     return FAT_Read(disk, file, sizeof(FAT_DirectoryEntry), dirEntry) == sizeof(FAT_DirectoryEntry);
 }
@@ -274,7 +274,7 @@ void FAT_Close(FAT_File far* file)
     }
 }
 
-bool FAT_FindFile(DISK* disk, FAT_File far* file, const char* name, FAT_DirectoryEntry* entryOut)
+bool FAT_FindFile(Disk & disk, FAT_File far* file, const char* name, FAT_DirectoryEntry* entryOut)
 {
     char fatName[12];
     FAT_DirectoryEntry entry;
@@ -308,7 +308,7 @@ bool FAT_FindFile(DISK* disk, FAT_File far* file, const char* name, FAT_Director
     return false;
 }
 
-FAT_File far* FAT_Open(DISK* disk, const char* path)
+FAT_File far* FAT_Open(Disk & disk, const char* path)
 {
     char name[MAX_PATH_SIZE];
 
