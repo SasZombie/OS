@@ -28,7 +28,7 @@ struct FAT_DirectoryEntry
 };
 
 #pragma pack(pop)
-//This is FAT16 structure! We need it to be backed, that is, the compiler should not add padding so we have to 
+//This is FAT16 structure! We need it to be packed, that is, the compiler should not add padding so we have to 
 //Use structs
 
 struct FAT_File

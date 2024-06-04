@@ -10,9 +10,9 @@ extern "C"{
         
         // cout(x86_Create_Dir("MYDAR"));
 
+        cout("Hello!!");
 
-
-        Disk disk(bootDrive);
+        // Disk disk(bootDrive);
 
     
 
