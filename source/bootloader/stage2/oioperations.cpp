@@ -238,7 +238,7 @@ void cin(char *var)
     }
     cout('\n');
 
-    buff[index] = '\0';
+    buff[index - 1] = '\0';
 
     unsigned size = strlen(buff);
     for (unsigned int i = 0; i < size; ++i)

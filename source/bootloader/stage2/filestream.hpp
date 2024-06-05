@@ -8,6 +8,7 @@ class FFile
 {
 private:
     bool isOpned;
+    const char* currentPath;
     Disk &disk;
     FAT_File __far* fd;
     FAT_DirectoryEntry entry;
@@ -20,9 +21,12 @@ public:
 
     void open(const char *str);
     bool readEntry();
+    bool isDirectory() const;
     void close();
     uint32_t read(uint32_t byteCount, void* dataOut);
+    
 
+    const char* getCurrentPath();
     char getEntry(unsigned i);
 };
 //Example of how to use cuz I always forget

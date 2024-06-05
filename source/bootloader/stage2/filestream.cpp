@@ -30,6 +30,11 @@ bool FFile::readEntry()
     return FAT_ReadEntry(this->disk, this->fd, &entry);
 }
 
+bool FFile::isDirectory() const
+{
+    return this->fd->IsDirectory;
+}
+
 void FFile::close()
 {
     this->isOpned = false;
@@ -39,6 +44,11 @@ void FFile::close()
 uint32_t FFile::read(uint32_t byteCount, void *dataOut)
 {
     return FAT_Read(disk, fd, byteCount, dataOut);
+}
+
+const char* FFile::getCurrentPath()
+{
+    return currentPath;
 }
 
 char FFile::getEntry(unsigned i)

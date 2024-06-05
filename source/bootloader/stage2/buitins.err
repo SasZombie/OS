@@ -1,0 +1,6 @@
+buitins.cpp(8): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(3): Note! N392: col(32) definition: 'Disk & disk' in 'void clear( char * * *, Disk & )'
+buitins.cpp(14): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(10): Note! N392: col(31) definition: 'Disk & disk' in 'void help( char * * *, Disk & )'
+buitins.cpp(70): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(66): Note! N392: col(30) definition: 'Disk & disk' in 'void pwd( char * * *, Disk & )'
