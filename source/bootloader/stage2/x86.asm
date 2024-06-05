@@ -55,7 +55,7 @@ __U4D:
 ;       -CALLER REMOVES PARAMETERS FROM STACK
 ;RETURN:
 ;       -INTEGERS, POINTERS: EAX
-;       -FLOATING POINTS: ST0
+;       -FLOATING POINTS: ST0 
 ;REGISTERS:
 ;       -EAX, ECX, EDX SAVED BY CALLER
 ;       -ALL OTHERS BY THE CALLEE; THAT IS ALL THE REGISTERS SHOULD BE RESTORED TO THE ORIGINAL VALUES BEFORE RETURINING!!
@@ -340,3 +340,52 @@ _x86_Create_Dir:
     pop bp
     ret
 
+global _x86_Clear_Line
+
+_x86_Clear_Line:
+
+    push bx
+
+    mov ah, 0x02
+    xor bh, bh    ; Page number (usually 0)
+    xor dh, dh    ; Row number (0-based)
+    mov dl, 0     ; Column number (0-based)
+    int 0x10
+
+    ; Clear the line using BIOS interrupt
+    mov ah, 0x06  ; Scroll window up
+    mov al, 0     ; Number of lines to scroll
+    mov cx, 0     ; Attribute (unused for clearing)
+    mov dh, 50     ; Top row
+    mov dl, 79    ; Rightmost column
+    mov bh, 7     ; Attribute (unused for clearing)
+    int 0x10
+
+    pop bx 
+    ret
+
+
+global _x86_Clear_Screen
+
+
+_x86_Clear_Screen:
+    
+    push bx
+
+    mov ah, 0x02
+    xor bh, bh    ; Page number (usually 0)
+    xor dh, dh    ; Row number (0-based)
+    mov dl, 0     ; Column number (0-based)
+    int 0x10
+
+    ; Clear the line using BIOS interrupt
+    mov ah, 0x06  ; Scroll window up
+    mov al, 0     ; Number of lines to scroll
+    mov cx, 0     ; Attribute (unused for clearing)
+    mov dh, 50     ; Top row
+    mov dl, 79    ; Rightmost column
+    mov bh, 7     ; Attribute (unused for clearing)
+    int 0x10
+
+    pop bx 
+    ret

@@ -1,6 +1,7 @@
 #include "oioperations.hpp"
 #include "filestream.hpp"
 #include "disk.hpp"
+#include "shell.hpp"
 
 #define NULL ((void*)0)
 
@@ -10,7 +11,7 @@ extern "C"{
         
         // cout(x86_Create_Dir("MYDAR"));
 
-        cout("Hello!!");
+        startShell("sas");
 
         // Disk disk(bootDrive);
 

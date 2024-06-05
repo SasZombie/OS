@@ -12,4 +12,6 @@ extern "C"{
     bool _cdecl x86_Disk_Reset(uint8_t drive);
     bool _cdecl x86_Disk_Read(uint8_t drive, uint8_t cylinder, uint8_t head, uint8_t sector, uint8_t count, void __far *dataOut);
     bool _cdecl x86_Disk_GetDriveParams(uint8_t drive, uint8_t *driveTypeOut, uint16_t* cylinderOut, uint16_t *sectorsOut, uint16_t *headsOut);
+    void _cdecl x86_Clear_Screen();
+    void _cdecl x86_Clear_Line();
 }

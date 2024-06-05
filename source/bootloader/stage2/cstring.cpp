@@ -41,3 +41,24 @@ unsigned int strlen(const char *str)
     
     return len;
 }
+
+int strcmp(const char* first, const char* seccond)
+{
+    while (*first && *seccond)
+    {
+        if(*first > *seccond)
+        {
+            return -1;
+        }
+        else if(*first < *seccond)
+        {
+            return 1;
+        }
+
+        ++first;
+        ++seccond;
+    }
+
+    return 0;
+    
+}
