@@ -1,2 +1,7 @@
-main.cpp(33): Warning! W726: col(5) no reference to formal parameter 'bootDrive'
-main.cpp(9): Note! N392: col(40) definition: 'unsigned short bootDrive' in 'void __cdecl cstart_( unsigned short )'
+main.cpp(15): Warning! W389: col(19) integral value may be truncated during assignment or initialization
+main.cpp(18): Warning! W665: col(17) temporary object used to initialize a non-constant reference
+main.cpp(18): Note! N638: col(17) 'Disk' defined in: disk.hpp(7) (col 7)
+main.cpp(18): Note! N630: col(17) source conversion type is 'unsigned short (lvalue)'
+main.cpp(18): Note! N631: col(17) target conversion type is 'Disk (lvalue)'
+main.cpp(18): Warning! W389: col(17) integral value may be truncated during assignment or initialization
+main.cpp(33): Warning! W391: col(22) assignment found in boolean expression

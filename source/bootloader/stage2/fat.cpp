@@ -222,6 +222,7 @@ uint32_t FAT_Read(Disk & disk, FAT_File __far* file, uint32_t byteCount, void* d
                 if (!disk.readSectors( fd->CurrentCluster, 1, fd->Buffer))
                 {
                     cout("FAT: read error!\n");
+                    byteCount = 0;
                     break;
                 }
             }
@@ -245,6 +246,8 @@ uint32_t FAT_Read(Disk & disk, FAT_File __far* file, uint32_t byteCount, void* d
                 if (!disk.readSectors( FAT_ClusterToLba(fd->CurrentCluster) + fd->CurrentSectorInCluster, 1, fd->Buffer))
                 {
                     cout("FAT: read error!\n");
+                    byteCount = 0;
+
                     break;
                 }
             }
