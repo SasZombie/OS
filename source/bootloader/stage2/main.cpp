@@ -29,7 +29,7 @@ extern "C" {
 
         char buffer[100];
         uint32_t read;
-        f.open("test.txt");
+        f.open("mydir/test.txt");
         while ((read = f.read(sizeof(buffer), buffer)))
         {
             for (uint32_t i = 0; i < read; i++)
