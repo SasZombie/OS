@@ -1,21 +1,33 @@
 #include "builtins.hpp"
 
-void clear(char*** args, Disk& disk)
+void clear(char* command, char* currentPath, Disk& disk)
 {
-    (void)args;
-
     x86_Clear_Screen();
 }
 
-void help(char*** args, Disk& disk)
+void help(char* command, char* currentPath, Disk& disk)
 {
-    (void)args;
-    cout("Type a command. Commadns are: \n\t help \n\t clear");
+    cout("Type a command. Commadns are: \n\t help \n\t clear \n\t ls \n\t pwd \n\t cd \n\t cat");
 }
 
-void ls(char*** args, Disk& disk)
+void ls(char* command, char* currentPath, Disk& disk)
 {
-    FFile f(disk, *args[1]);
+    // cout("Hello");
+    cout(currentPath);
+    FFile f(disk);
+
+    char dir[] = "mydir";
+    char folder[] = "/";
+
+    if(strcmp(currentPath, "mydir") == 0)
+    {
+        f.open(dir);
+    }
+    else
+    {
+        f.open(folder);
+    }
+
     int max = 0;
     while (f.readEntry() && max < 5)
     {
@@ -27,13 +39,13 @@ void ls(char*** args, Disk& disk)
     f.close();
 }
 
-void cd(char*** args, Disk& disk)
+void cd(char* command, char* currentPath, Disk& disk)
 {
-    const char* command = *args[0];
 
-    if(strlen(command) == 2)
+    if (strlen(command) == 2)
     {
-        *args[1] = "/";
+        strcpy(currentPath, "/");
+        cout(currentPath);
         return;
     }
     // const char* oldPath = args[1];
@@ -41,7 +53,7 @@ void cd(char*** args, Disk& disk)
     char newPath[256];
     unsigned short index = 3;
 
-    while(command[index])
+    while (command[index])
     {
         newPath[index - 3] = command[index];
         ++index;
@@ -49,7 +61,7 @@ void cd(char*** args, Disk& disk)
 
     FFile f(disk, newPath);
 
-    if(!f.isDirectory())
+    if (!f.isDirectory())
     {
         cout(newPath);
         cout(" is not a directory!\n");
@@ -58,13 +70,32 @@ void cd(char*** args, Disk& disk)
     }
 
     f.close();
-    
-    *args[1] = "mydir";
-    cout(*args[1]);
+
+    strcpy(currentPath, "mydir");
+    if(strcmp(currentPath, "mydir") == 0)
+    {
+        cout("DA");
+    }
+    // cout(*currentPath);
 }
 
-void pwd(char*** args, Disk& disk)
+void pwd(char* command, char* currentPath, Disk& disk)
 {
-    cout(*args[1]);
-    cout('\n');
+    cout(currentPath);
+}
+
+void cat(char* command, char* currentPath, Disk& disk)
+{
+    FFile f(disk, command + 4);
+
+    char buffer[100];
+    uint32_t read;
+    while ((read = f.read(sizeof(buffer), buffer)))
+    {
+        for (uint32_t i = 0; i < read; i++)
+        {
+            cout(buffer[i]);
+        }
+    }
+    f.close();
 }

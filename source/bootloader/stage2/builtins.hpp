@@ -3,8 +3,9 @@
 #include "disk.hpp"
 #include "filestream.hpp"
 
-void clear(char*** args, Disk& disk);
-void help(char*** args, Disk& disk);
-void ls(char*** args, Disk& disk);
-void cd(char*** args, Disk& disk);
-void pwd(char*** args, Disk& disk);
+void clear(char* command, char* currentPath, Disk &disk);
+void help(char* command, char* currentPath, Disk &disk);
+void ls(char* command, char* currentPath, Disk &disk);
+void cd(char* command, char* currentPath, Disk &disk);
+void pwd(char* command, char* currentPath, Disk &disk);
+void cat(char* command, char* currentPath, Disk &disk);

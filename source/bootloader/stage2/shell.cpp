@@ -3,7 +3,7 @@
 struct Command
 {
     char* name;
-    void (*func)(char*** args, Disk &disk);
+    void (*func)(char* command, char* currentPath, Disk &disk);
 };
 
 static Disk disk;
@@ -14,10 +14,11 @@ static const Command buildins[] = {
     {"help", help},
     {"ls", ls},
     {"cd", cd},
-    {"pwd", pwd}
+    {"pwd", pwd},
+    {"cat", cat}
 };
 
-char* currentPath = "/";
+char currentPath[256] = "/";
 
 const unsigned short nrCom = sizeof(buildins)/sizeof(buildins[0]);
 
@@ -27,8 +28,7 @@ void validateCommand(char* command)
     {
         if(strcmp(command, buildins[i].name) == 0)
         {
-            char *sending[2] = {command, currentPath};
-            buildins[i].func(&sending, disk);
+            buildins[i].func(command, currentPath, disk);
             return;
         }
     }
