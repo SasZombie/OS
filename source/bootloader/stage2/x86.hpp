@@ -14,4 +14,11 @@ extern "C"{
     bool _cdecl x86_Disk_GetDriveParams(uint8_t drive, uint8_t *driveTypeOut, uint16_t* cylinderOut, uint16_t *sectorsOut, uint16_t *headsOut);
     void _cdecl x86_Clear_Screen();
     void _cdecl x86_Clear_Line();
+    void _cdecl x86_Draw_Pixel(int x, int y, int color);
+    void _cdecl x86_Initiate_Video_Mode();
+    void _cdecl x86_Exit_Video_Mode();
+    void _cdecl x86_Wait_Keyboard_Input();
+
+
+
 }

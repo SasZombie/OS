@@ -1,0 +1,16 @@
+const int COLOR_BLACK = 0x00;
+const int COLOR_BLUE = 0x01;
+const int COLOR_GREEN = 0x02;
+const int COLOR_CYAN = 0x03;
+const int COLOR_RED = 0x04;
+const int COLOR_MAGENTA = 0x05;
+const int COLOR_BRWON = 0x06;
+const int COLOR_LIGHT_GRAY = 0x07;
+const int COLOR_DARK_GRAY = 0x08;
+const int COLOR_LIGHT_BLUE = 0x09;
+const int COLOR_LIGHT_GREEN = 0x0A;
+const int COLOR_LIGHT_CYAN = 0x0B;
+const int COLOR_LIGHT_RED = 0x0C;
+const int COLOR_LIGHT_MAGENTA = 0x0D;
+const int COLOR_YELLOW = 0x0E;
+const int COLOR_WHITE = 0x0F;

@@ -347,18 +347,17 @@ _x86_Clear_Line:
     push bx
 
     mov ah, 0x02
-    xor bh, bh    ; Page number (usually 0)
-    xor dh, dh    ; Row number (0-based)
-    mov dl, 0     ; Column number (0-based)
+    xor bh, bh    ; Page number 
+    xor dh, dh    ; Row number 
+    mov dl, 0     ; Column number
     int 0x10
 
-    ; Clear the line using BIOS interrupt
     mov ah, 0x06  ; Scroll window up
     mov al, 0     ; Number of lines to scroll
-    mov cx, 0     ; Attribute (unused for clearing)
+    mov cx, 0     ; Set to 0
     mov dh, 50     ; Top row
     mov dl, 79    ; Rightmost column
-    mov bh, 7     ; Attribute (unused for clearing)
+    mov bh, 7     ; Set to 7
     int 0x10
 
     pop bx 
@@ -373,19 +372,69 @@ _x86_Clear_Screen:
     push bx
 
     mov ah, 0x02
-    xor bh, bh    ; Page number (usually 0)
-    xor dh, dh    ; Row number (0-based)
-    mov dl, 0     ; Column number (0-based)
+    xor bh, bh    ; Page number
+    xor dh, dh    ; Row number 
+    mov dl, 0     ; Column number
     int 0x10
 
-    ; Clear the line using BIOS interrupt
-    mov ah, 0x06  ; Scroll window up
+    mov ah, 0x06  ; Scroll up
     mov al, 0     ; Number of lines to scroll
-    mov cx, 0     ; Attribute (unused for clearing)
-    mov dh, 50     ; Top row
+    mov cx, 0     ; Set to 0
+    mov dh, 50    ; Top row
     mov dl, 79    ; Rightmost column
-    mov bh, 7     ; Attribute (unused for clearing)
+    mov bh, 7     ; Set to 7
     int 0x10
 
     pop bx 
+    ret
+
+
+global _x86_Draw_Pixel
+
+_x86_Draw_Pixel:
+    
+    push bp
+    mov bp, sp 
+
+    mov cx, [bp + 4]
+    mov dx, [bp + 6]
+
+    mov ah, 0x0C
+    mov al, [bp + 8]
+
+    int 0x10
+  
+    mov sp, bp
+    pop bp
+
+    ret
+
+
+global _x86_Initiate_Video_Mode
+
+_x86_Initiate_Video_Mode:
+
+    mov ah, 0x00
+    mov al, 0x13
+
+    int 0x10
+
+    ret
+
+global _x86_Exit_Video_Mode
+
+_x86_Exit_Video_Mode:
+    mov ah, 0x00
+    mov al, 0x03
+
+    int 0x10
+    ret
+
+global _x86_Wait_Keyboard_Input
+
+_x86_Wait_Keyboard_Input:
+
+    mov ah, 0x00
+    int 0x16
+
     ret

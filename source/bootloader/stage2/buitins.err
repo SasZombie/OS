@@ -19,3 +19,9 @@ buitins.cpp(82): Note! N392: col(50) definition: 'Disk & disk' in 'void pwd( cha
 buitins.cpp(93): Warning! W391: col(18) assignment found in boolean expression
 buitins.cpp(101): Warning! W726: col(1) no reference to formal parameter 'currentPath'
 buitins.cpp(87): Note! N392: col(31) definition: 'char * currentPath' in 'void cat( char *, char *, Disk & )'
+buitins.cpp(241): Warning! W726: col(1) no reference to formal parameter 'command'
+buitins.cpp(109): Note! N392: col(21) definition: 'char * command' in 'void drawFace( char *, char *, Disk & )'
+buitins.cpp(241): Warning! W726: col(1) no reference to formal parameter 'currentPath'
+buitins.cpp(109): Note! N392: col(36) definition: 'char * currentPath' in 'void drawFace( char *, char *, Disk & )'
+buitins.cpp(241): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(109): Note! N392: col(55) definition: 'Disk & disk' in 'void drawFace( char *, char *, Disk & )'

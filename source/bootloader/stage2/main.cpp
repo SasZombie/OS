@@ -5,6 +5,9 @@
 
 #define NULL ((void*)0)
 
+
+
+
 extern "C" {
     void _cdecl cstart_(unsigned short bootDrive)
     {

@@ -15,7 +15,8 @@ static const Command buildins[] = {
     {"ls", ls},
     {"cd", cd},
     {"pwd", pwd},
-    {"cat", cat}
+    {"cat", cat},
+    {"draw face", drawFace}
 };
 
 char currentPath[256] = "/";
