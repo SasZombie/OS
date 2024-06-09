@@ -7,5 +7,7 @@ bool islower(char chr)
 
 char toupper(char chr)
 {
-    return islower(chr) ? (chr - 'a' + 'A') : chr;
+    if(chr > 'Z' || chr < 'a')
+        return chr;
+    return islower(chr) ? (chr + 32) : chr;
 }

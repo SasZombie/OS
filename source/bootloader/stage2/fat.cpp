@@ -75,7 +75,7 @@ bool FAT_ReadBootSector(Disk & disk)
 
 bool FAT_ReadFat(Disk & disk)
 {
-    return disk.readSectors( g_Data->BS.BootSector.ReservedSectors, g_Data->BS.BootSector.SectorsPerFat, g_Fat);
+    return disk.readSectors(g_Data->BS.BootSector.ReservedSectors, g_Data->BS.BootSector.SectorsPerFat, g_Fat);
 }
 
 bool FAT_Initialize(Disk & disk)
