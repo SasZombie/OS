@@ -11,3 +11,5 @@ void cd(char* command, char* currentPath, Disk &disk);
 void pwd(char* command, char* currentPath, Disk &disk);
 void cat(char* command, char* currentPath, Disk &disk);
 void drawFace(char* command, char* currentPath, Disk &disk);
+void drawPixels(char* command, char* currentPath, Disk &disk);
+void drawSymbal(char* command, char* currentPath, Disk &disk);

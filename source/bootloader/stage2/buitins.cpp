@@ -155,7 +155,7 @@ void drawFace(char* command, char* currentPath, Disk& disk)
     {
         x86_Draw_Pixel(p[i].cx, p[i].cy, COLOR_RED);
     }
-    
+
     Point empty;
     empty.cx = -1;
     empty.cy = -1;
@@ -238,4 +238,116 @@ void drawFace(char* command, char* currentPath, Disk& disk)
 
     x86_Wait_Keyboard_Input();
     x86_Exit_Video_Mode();
+}
+
+const unsigned int cursorHeight = 7;
+const unsigned int cursorWidth = 2;
+
+static void drawRect(unsigned int row, unsigned int col, unsigned int color)
+{
+    for (unsigned int i = row; i < row + cursorWidth; ++i)
+    {
+        for (unsigned int j = col; j < col + cursorHeight; ++j)
+        {
+            x86_Draw_Pixel(i, j, color);
+        }
+    }
+}
+
+void drawPixels(char* command, char* currentPath, Disk& disk)
+{
+    x86_Initiate_Video_Mode();
+
+    unsigned int prevPosX = 1;
+    unsigned int prevPosY = 1;
+    unsigned int x = 0; //Get Cursor X
+    unsigned int y = 0; //Get Cursor Y
+    unsigned int currentColor = COLOR_WHITE;
+    while (true)
+    {
+        drawRect(x, y, currentColor);
+
+        char color;
+        
+        x86_Read_Character(&color);
+        prevPosX = x;
+        prevPosY = y;
+
+        switch (color)
+        {
+        case '1':
+            currentColor = COLOR_BLACK;
+            break;
+        case '2':
+            currentColor = COLOR_WHITE;
+            break;
+        case '3':
+            currentColor = COLOR_GREEN;
+            break;
+        case '4':
+            currentColor = COLOR_CYAN;
+            break;
+        case 'w':
+            if (y != 0)
+                --y;
+            break;
+        case 'a':
+            if (x != 0)
+                --x;
+            break;
+        case 's':
+            ++y;
+            break;
+        case 'd':
+            ++x;
+            break;
+        case '\t':
+            x86_Exit_Video_Mode();
+            return;
+        default:
+            break;
+        }
+    }
+
+}
+
+
+void drawSymbal(char* command, char* currentPath, Disk& disk)
+{
+    x86_Initiate_Video_Mode();
+
+    unsigned int prevPosX = 1;
+    unsigned int prevPosY = 1;
+    unsigned int x = 0; //Get Cursor X
+    unsigned int y = 0; //Get Cursor Y
+    unsigned int currentColor = COLOR_WHITE;
+    while (true)
+    {
+        char color;
+        x86_Read_Character(&color);
+        prevPosX = x;
+        prevPosY = y;
+        switch (color)
+        {
+        case '1':
+            currentColor = COLOR_BLACK;
+            break;
+        case '2':
+            currentColor = COLOR_WHITE;
+            break;
+        case '3':
+            currentColor = COLOR_GREEN;
+            break;
+        case '4':
+            currentColor = COLOR_CYAN;
+            break;
+        case '\t':
+            x86_Exit_Video_Mode();
+            return;
+        default:
+            break;
+        }
+        cout(color);
+    }
+
 }
