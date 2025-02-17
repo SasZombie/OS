@@ -1,16 +1,16 @@
 #include "builtins.hpp"
 
-void clear(char* command, char* currentPath, Disk& disk)
+void clear(char *command, char *currentPath, Disk &disk)
 {
     x86_Clear_Screen();
 }
 
-void help(char* command, char* currentPath, Disk& disk)
+void help(char *command, char *currentPath, Disk &disk)
 {
     cout("Type a command. Commadns are: \n\t help \n\t clear \n\t ls \n\t pwd \n\t cd \n\t cat \n\t draw face");
 }
 
-void ls(char* command, char* currentPath, Disk& disk)
+void ls(char *command, char *currentPath, Disk &disk)
 {
 
     cout(currentPath);
@@ -39,7 +39,7 @@ void ls(char* command, char* currentPath, Disk& disk)
     f.close();
 }
 
-void cd(char* command, char* currentPath, Disk& disk)
+void cd(char *command, char *currentPath, Disk &disk)
 {
 
     if (strlen(command) == 2)
@@ -79,12 +79,12 @@ void cd(char* command, char* currentPath, Disk& disk)
     // cout(*currentPath);
 }
 
-void pwd(char* command, char* currentPath, Disk& disk)
+void pwd(char *command, char *currentPath, Disk &disk)
 {
     cout(currentPath);
 }
 
-void cat(char* command, char* currentPath, Disk& disk)
+void cat(char *command, char *currentPath, Disk &disk)
 {
     FFile f(disk, command + 4);
 
@@ -104,9 +104,7 @@ struct Point
     int16_t cx, cy;
 };
 
-
-
-void drawFace(char* command, char* currentPath, Disk& disk)
+void drawFace(char *command, char *currentPath, Disk &disk)
 {
     x86_Initiate_Video_Mode();
 
@@ -117,8 +115,7 @@ void drawFace(char* command, char* currentPath, Disk& disk)
     const int smallerCircleDiam = 2 * smallerCircleR;
     const int smallerCircleSquaredRad = smallerCircleR * smallerCircleR;
 
-
-    Point p[500]; //Buffer for efficence 
+    Point p[500]; // Buffer for efficence
     int index = 0;
 
     for (int i = 0; i <= diamter; ++i)
@@ -148,7 +145,6 @@ void drawFace(char* command, char* currentPath, Disk& disk)
                 }
             }
         }
-
     }
 
     for (int i = 0; i < index; ++i)
@@ -193,7 +189,6 @@ void drawFace(char* command, char* currentPath, Disk& disk)
                 }
             }
         }
-
     }
     for (int i = 0; i < index; ++i)
     {
@@ -229,7 +224,6 @@ void drawFace(char* command, char* currentPath, Disk& disk)
                 }
             }
         }
-
     }
     for (int i = 0; i < index; ++i)
     {
@@ -254,21 +248,49 @@ static void drawRect(unsigned int row, unsigned int col, unsigned int color)
     }
 }
 
-void drawPixels(char* command, char* currentPath, Disk& disk)
+void htop(char *command, char *currentPath, Disk &disk)
+{
+    FFile f(disk);
+
+    f.open("/");
+
+    int max = 0;
+    uint32_t total = 0;
+    while (f.readEntry() && max < 5)
+    {
+        ++max;
+        total = total + f.fileSize();
+    }
+
+    const uint32_t maxSpace = 1474560;
+    cout("Total space is: ");
+    cout(maxSpace);
+    cout(" Bytes\nRemaining = ");
+    cout(maxSpace - total);
+    cout(" Bytes\n");
+    f.close();
+
+    cout("Active tasks: Htop, Shell\n");
+    cout("Devices:\nCPU: i486\nVideoCard: -\nAudio Card: -\n");
+    cout("OS: ");
+    displayInfo();
+}
+
+void drawPixels(char *command, char *currentPath, Disk &disk)
 {
     x86_Initiate_Video_Mode();
 
     unsigned int prevPosX = 1;
     unsigned int prevPosY = 1;
-    unsigned int x = 0; //Get Cursor X
-    unsigned int y = 0; //Get Cursor Y
+    unsigned int x = 0; // Get Cursor X
+    unsigned int y = 0; // Get Cursor Y
     unsigned int currentColor = COLOR_WHITE;
     while (true)
     {
         drawRect(x, y, currentColor);
 
         char color;
-        
+
         x86_Read_Character(&color);
         prevPosX = x;
         prevPosY = y;
@@ -308,18 +330,16 @@ void drawPixels(char* command, char* currentPath, Disk& disk)
             break;
         }
     }
-
 }
 
-
-void drawSymbal(char* command, char* currentPath, Disk& disk)
+void drawSymbal(char *command, char *currentPath, Disk &disk)
 {
     x86_Initiate_Video_Mode();
 
     unsigned int prevPosX = 1;
     unsigned int prevPosY = 1;
-    unsigned int x = 0; //Get Cursor X
-    unsigned int y = 0; //Get Cursor Y
+    unsigned int x = 0; // Get Cursor X
+    unsigned int y = 0; // Get Cursor Y
     unsigned int currentColor = COLOR_WHITE;
     while (true)
     {
@@ -349,5 +369,4 @@ void drawSymbal(char* command, char* currentPath, Disk& disk)
         }
         cout(color);
     }
-
 }

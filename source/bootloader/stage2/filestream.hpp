@@ -26,6 +26,7 @@ public:
     uint32_t read(uint32_t byteCount, void* dataOut);
     
 
+    uint32_t fileSize() const;
     const char* getCurrentPath();
     char getEntry(unsigned i);
 };

@@ -25,6 +25,11 @@ void FFile::open(const char *str)
     this->fd = FAT_Open(disk, str);
 }
 
+uint32_t FFile::fileSize() const
+{
+    return this->entry.Size;
+}
+
 bool FFile::readEntry()
 {
     return FAT_ReadEntry(this->disk, this->fd, &entry);

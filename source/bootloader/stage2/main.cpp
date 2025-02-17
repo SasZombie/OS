@@ -3,9 +3,10 @@
 #include "disk.hpp"
 #include "shell.hpp"
 
-#define NULL ((void*)0)
+#define NULL ((void *)0)
 
-extern "C" {
+extern "C"
+{
     void _cdecl cstart_(unsigned short bootDrive)
     {
         cout("Please provide your name: ");

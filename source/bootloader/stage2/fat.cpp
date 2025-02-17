@@ -92,6 +92,7 @@ bool FAT_Initialize(Disk & disk)
     // read FAT
     g_Fat = (uint8_t __far*)g_Data + sizeof(FAT_Data);
     uint32_t fatSize = g_Data->BS.BootSector.BytesPerSector * g_Data->BS.BootSector.SectorsPerFat;
+
     if (sizeof(FAT_Data) + fatSize >= MEMORY_FAT_SIZE)
     {
         cout("FAT: not enough memory to read FAT! Required %lu, only have \n");
@@ -272,6 +273,14 @@ void FAT_Close(FAT_File __far* file)
     else
     {
         g_Data->OpenedFiles[file->Handle].Opened = false;
+    }
+}
+
+void displayInfo()
+{
+    for(int i = 0; i < 11; ++i)
+    {
+        cout(static_cast<char>(g_Data->BS.BootSector.VolumeLabel[i]));
     }
 }
 

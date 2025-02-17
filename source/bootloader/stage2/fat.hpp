@@ -58,3 +58,5 @@ FAT_File __far* FAT_Open(Disk & disk, const char* path);
 uint32_t FAT_Read(Disk & disk, FAT_File __far* file, uint32_t byteCount, void* dataOut);
 bool FAT_ReadEntry(Disk & disk, FAT_File __far* file, FAT_DirectoryEntry* dirEntry);
 void FAT_Close(FAT_File __far* file);
+
+void displayInfo();
