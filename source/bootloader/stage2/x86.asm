@@ -438,3 +438,41 @@ _x86_Wait_Keyboard_Input:
     int 0x16
 
     ret
+
+;void _cdecl x86_Read_Input_Port(unsigned int addr);
+global _x86_Read_Input_Port
+
+_x86_Read_Input_Port:
+
+    push bp
+    mov bp, sp 
+
+    mov dx, [bp + 4]
+    in al, dx
+    cmp al, 0x01    
+
+    mov sp, bp
+    pop bp
+
+    ret
+
+
+global _x86_Write_Input_Port
+
+_x86_Write_Input_Port:
+
+
+    push bp
+    mov bp, sp 
+
+    xor ax, ax
+    
+    mov dx, [bp + 4]
+    mov al, [bp + 6]
+
+    out dx, al    
+
+    mov sp, bp
+    pop bp
+
+    ret

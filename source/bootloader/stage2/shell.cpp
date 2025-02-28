@@ -19,6 +19,8 @@ static const Command buildins[] = {
     {"draw face", drawFace},
     {"draw pixels", drawPixels},
     {"draw symbol", drawSymbal},
+    {"send to port", sendToPort},
+    {"read from port", readFromPort},
     {"htop", htop}
 };
 

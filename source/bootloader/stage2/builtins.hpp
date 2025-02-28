@@ -14,3 +14,5 @@ void htop(char* command, char* currentPath, Disk &disk);
 void drawFace(char* command, char* currentPath, Disk &disk);
 void drawPixels(char* command, char* currentPath, Disk &disk);
 void drawSymbal(char* command, char* currentPath, Disk &disk);
+void sendToPort(char* command, char* currentPath, Disk &disk);
+void readFromPort(char* command, char* currentPath, Disk &disk);

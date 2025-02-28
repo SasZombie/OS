@@ -18,7 +18,9 @@ extern "C"{
     void _cdecl x86_Initiate_Video_Mode();
     void _cdecl x86_Exit_Video_Mode();
     void _cdecl x86_Wait_Keyboard_Input();
-
+    
+    bool _cdecl x86_Read_Input_Port(unsigned int addr);
+    void _cdecl x86_Write_Input_Port(unsigned int addr, bool value);
 
 
 }
