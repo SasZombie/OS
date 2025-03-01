@@ -21,7 +21,9 @@ static const Command buildins[] = {
     {"draw symbol", drawSymbal},
     {"send to port", sendToPort},
     {"read from port", readFromPort},
-    {"htop", htop}
+    {"htop", htop},
+    {"write zigbee", writeZigbee},
+    {"read zigbee", readZigbee}
 };
 
 char currentPath[256] = "/";

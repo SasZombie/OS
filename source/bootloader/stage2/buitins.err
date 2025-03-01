@@ -53,6 +53,18 @@ buitins.cpp(400): Warning! W726: col(1) no reference to formal parameter 'curren
 buitins.cpp(391): Note! N392: col(40) definition: 'char * currentPath' in 'void readFromPort( char *, char *, Disk & )'
 buitins.cpp(400): Warning! W726: col(1) no reference to formal parameter 'disk'
 buitins.cpp(391): Note! N392: col(59) definition: 'Disk & disk' in 'void readFromPort( char *, char *, Disk & )'
+buitins.cpp(414): Warning! W726: col(1) no reference to formal parameter 'command'
+buitins.cpp(406): Note! N392: col(24) definition: 'char * command' in 'void writeZigbee( char *, char *, Disk & )'
+buitins.cpp(414): Warning! W726: col(1) no reference to formal parameter 'currentPath'
+buitins.cpp(406): Note! N392: col(39) definition: 'char * currentPath' in 'void writeZigbee( char *, char *, Disk & )'
+buitins.cpp(414): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(406): Note! N392: col(58) definition: 'Disk & disk' in 'void writeZigbee( char *, char *, Disk & )'
+buitins.cpp(421): Warning! W726: col(1) no reference to formal parameter 'command'
+buitins.cpp(416): Note! N392: col(23) definition: 'char * command' in 'void readZigbee( char *, char *, Disk & )'
+buitins.cpp(421): Warning! W726: col(1) no reference to formal parameter 'currentPath'
+buitins.cpp(416): Note! N392: col(38) definition: 'char * currentPath' in 'void readZigbee( char *, char *, Disk & )'
+buitins.cpp(421): Warning! W726: col(1) no reference to formal parameter 'disk'
+buitins.cpp(416): Note! N392: col(57) definition: 'Disk & disk' in 'void readZigbee( char *, char *, Disk & )'
 oioperations.hpp(67): Warning! W716: col(24) integral value may be truncated
 oioperations.hpp(67): Note! N634: col(24) template function instantiation for 'cin' was in: buitins.cpp(385) (col 25)
 oioperations.hpp(45): Note! N392: col(6) definition: 'void cin( bool & )'

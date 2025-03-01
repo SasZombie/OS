@@ -476,3 +476,59 @@ _x86_Write_Input_Port:
     pop bp
 
     ret
+
+
+global _x86_Zigbee_Write
+
+_x86_Zigbee_Write:
+
+
+    push bp
+    mov bp, sp 
+
+    xor ax, ax
+
+    mov dx, 0x3FD           ;Line status register
+
+    .check_ready:
+        in al, dx           ;Read status
+        test al, 0x20       ;Check if transmit is empty 
+        jz .check_ready   
+
+
+    mov dx, 0x3F8           ;Com1 data Port
+    mov al, [bp + 4]        ;First parameter
+    
+    out dx, al
+
+    mov sp, bp
+    pop bp
+
+    ret
+
+
+; global  x86_Zigbee_Write(char value)
+
+global _x86_Zigbee_Read
+
+_x86_Zigbee_Read:
+
+    push bp
+    mov bp, sp 
+
+    xor ax, ax
+
+    mov dx, 0x3FD
+
+    .wait_for_data:
+        in al, dx         ;Read status
+        test al, 0x01     ;Check data 
+        jz .wait_for_data   
+
+    mov dx, 0x3F8         ;Com1 data Port
+    in al, dx             ;Byte Recived
+
+    mov sp, bp
+    pop bp
+
+    ret

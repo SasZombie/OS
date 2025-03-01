@@ -16,3 +16,5 @@ void drawPixels(char* command, char* currentPath, Disk &disk);
 void drawSymbal(char* command, char* currentPath, Disk &disk);
 void sendToPort(char* command, char* currentPath, Disk &disk);
 void readFromPort(char* command, char* currentPath, Disk &disk);
+void writeZigbee(char* command, char* currentPath, Disk &disk);
+void readZigbee(char* command, char* currentPath, Disk &disk);

@@ -22,5 +22,7 @@ extern "C"{
     bool _cdecl x86_Read_Input_Port(unsigned int addr);
     void _cdecl x86_Write_Input_Port(unsigned int addr, bool value);
 
+    char _cdecl x86_Zigbee_Read();
+    void _cdecl x86_Zigbee_Write(char value);
 
 }

@@ -398,3 +398,22 @@ void readFromPort(char *command, char *currentPath, Disk &disk)
 
     cout(response);
 }
+
+
+void writeZigbee(char *command, char *currentPath, Disk &disk)
+{
+    cout("What to write: ");
+
+    char c;
+    cin(c);
+
+    x86_Zigbee_Write(c);
+}
+
+//This will block until reading something!!!
+void readZigbee(char *command, char *currentPath, Disk &disk)
+{
+    cout("Reading\n");
+
+    cout(x86_Zigbee_Read());
+}
