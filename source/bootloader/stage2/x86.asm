@@ -467,7 +467,7 @@ _x86_Write_Input_Port:
 
     xor ax, ax
     
-    mov dx, [bp + 4]
+    mov dx, 0x3FD
     mov al, [bp + 6]
 
     out dx, al    
@@ -527,6 +527,24 @@ _x86_Zigbee_Read:
 
     mov dx, 0x3F8         ;Com1 data Port
     in al, dx             ;Byte Recived
+
+    mov sp, bp
+    pop bp
+
+    ret
+
+
+
+global _x86_COM1_OUT
+
+_x86_COM1_OUT:
+    
+    push bp
+    mov bp, sp 
+
+    mov dx, 0x3F8
+    mov al, '1'
+    out dx, al
 
     mov sp, bp
     pop bp

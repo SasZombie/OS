@@ -25,4 +25,6 @@ extern "C"{
     char _cdecl x86_Zigbee_Read();
     void _cdecl x86_Zigbee_Write(char value);
 
+    void _cdecl x86_COM1_OUT();
+
 }
