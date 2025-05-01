@@ -373,35 +373,16 @@ void drawSymbal(char *command, char *currentPath, Disk &disk)
 
 void sendToPort(char *command, char *currentPath, Disk &disk)
 {
-    x86_COM1_OUT();
-    
-    // cout("Port number?\n");
-    // unsigned int addr;
-    // cin(addr);
-
-    // cout("Value to Write?\n");
-    // bool value;
-
-    // cin(value);
-
-    
-    // x86_Write_Input_Port(addr, value);
-    // int elem;
-    // cin(elem);
-
-    // cout("Successfull!\n");
-    
+    x86_COM1_OUT();    
 }
 
 void readFromPort(char *command, char *currentPath, Disk &disk)
 {
-    cout("Port number?\n");
-    unsigned int addr;
-    cin(addr);
-
-    bool response = x86_Read_Input_Port(addr); 
-
-    cout(response);
+    char c;
+    do{
+        c = x86_COM1_IN();
+        cout(c);   
+    }while(c != '\n');
 }
 
 

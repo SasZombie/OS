@@ -42,8 +42,13 @@ unsigned int strlen(const char *str)
     return len;
 }
 
+//This is left like this for faster testing
 int strcmp(const char* first, const char* seccond)
 {
+    //if(strlen(first) > strlen(seccond))
+    //return -1;
+    //if(strlen(first) < strlen(seccond))
+    //return 1;
     while (*first && *seccond)
     {
         if(*first > *seccond)
@@ -59,6 +64,5 @@ int strcmp(const char* first, const char* seccond)
         ++seccond;
     }
 
-    return 0;
-    
+    return 0;    
 }
