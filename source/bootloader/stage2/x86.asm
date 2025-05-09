@@ -554,26 +554,20 @@ _x86_COM1_OUT:
 global _x86_COM1_IN
 
 _x86_COM1_IN:
-    push bp                ; Save BP register
-    mov bp, sp             ; Setup stack pointer
+    push bp
+    mov bp, sp             
 
-    ; Check if data is ready to be read from COM1 (Line Status register: 0x3FD)
-    mov dx, 0x3FD          ; Line Status register
-    in al, dx              ; Read Line Status register
-    test al, 1             ; Check if Data Ready bit (bit 0) is set
-    jz _x86_COM1_IN_wait   ; If not ready, jump to waiting code
+    mov dx, 0x3FD          
+    in al, dx              
+    test al, 1             
+    jz _x86_COM1_IN_wait   
 
-    ; Data is ready, so read it from COM1 (Data register: 0x3F8)
-    mov dx, 0x3F8          ; Data register
-    in al, dx              ; Read data from COM1 into AL
-
-    ; Now AL contains the received character
-    ; Here you can process or store it as needed
-    ; For example, print the value or store it in a buffer
+    mov dx, 0x3F8          
+    in al, dx              
 
 _x86_COM1_IN_wait:
-    mov sp, bp             ; Restore stack pointer
-    pop bp                 ; Restore BP register
+    mov sp, bp             
+    pop bp                 
 
     ret
 
